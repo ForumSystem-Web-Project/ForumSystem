@@ -1,4 +1,4 @@
-INSERT INTO users (FirstName, LastName, Email, Username, Password)
+INSERT INTO Users (FirstName, LastName, Email, Username, Password)
 VALUES
     ('Johnathan', 'Jefferson', 'johnjefferson@example.com', 'johnjeff123', 'securePass123!'),
     ('Alexandra', 'Smith', 'alexsmith@example.com', 'alexsmith42', 'Passw0rd@2023'),

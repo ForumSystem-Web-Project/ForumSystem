@@ -4,11 +4,9 @@ import com.example.forumsystem.exeptions.DublicateEntityExeption;
 import com.example.forumsystem.exeptions.EntityNotFoundExeption;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.User;
-import com.example.forumsystem.models.UserDTO;
 import com.example.forumsystem.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -53,7 +51,7 @@ public class UserRestController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
+    public User createUser(@Valid @RequestBody User user) {
         try {
 
             userService.createUser(user);

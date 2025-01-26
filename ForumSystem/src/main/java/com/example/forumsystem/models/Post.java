@@ -25,7 +25,7 @@ public class Post {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "created_by")
+    @JoinColumn(name = "CreatedBy")
     private User createdBy;
 
     public Post() {
@@ -58,6 +58,18 @@ public class Post {
 
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override

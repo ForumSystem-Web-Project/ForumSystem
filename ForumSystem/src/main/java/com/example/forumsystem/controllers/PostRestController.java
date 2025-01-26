@@ -9,6 +9,7 @@ import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class PostRestController {
 
     private final PostService postService;
 
+    @Autowired
     public PostRestController(PostService postService) {
         this.postService = postService;
     }
@@ -51,45 +53,4 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
-//    @PostMapping
-//    public Post createPost(@Valid @RequestBody PostDTO postDTO) {
-//        try {
-//            Post post = modelMapper.fromDto(postDTO);
-//            postService.createPost(post);
-//            return post;
-//        } catch (EntityNotFoundExeption e) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//        } catch (DublicateEntityExeption e) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-//        } catch (UnknownError e) {
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-//        }
-//    }
-//
-//    @PutMapping("/{id}")
-//    public Post updatePost(@PathVariable int id, @Valid @RequestBody PostDTO postDTO) {
-//        try {
-//            Post post = modelMapper.fromDto(postDTO, id);
-//            postService.updatePost(post, user);
-//            return post;
-//        } catch (EntityNotFoundException e) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//        } catch (EntityNotFoundExeption e) {
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-//        } catch (UnauthorizedOperationException e) {
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-//        }
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public void deletePost(@PathVariable int id) {
-//        try {
-//            postService.deletePost(id, user);
-//        } catch (EntityNotFoundException e) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-//        } catch (UnauthorizedOperationException e) {
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-//        }
-//    }
 }

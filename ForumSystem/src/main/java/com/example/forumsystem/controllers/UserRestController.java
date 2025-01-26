@@ -7,6 +7,7 @@ import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,6 +20,7 @@ public class UserRestController {
 
     private final UserService userService;
 
+    @Autowired
     public UserRestController(UserService userService) {
         this.userService = userService;
     }

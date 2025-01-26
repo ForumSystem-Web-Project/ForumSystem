@@ -17,7 +17,6 @@ public class User {
     @Column(name = "Username")
     private String username;
 
-    @JsonIgnore
     @Column(name = "Password")
     private String password;
 
@@ -29,9 +28,6 @@ public class User {
 
     @Column(name = "Email")
     private String email;
-
-    @JoinColumn(name = "UserID")
-    private boolean isAdmin;
 
     public User() {
     }
@@ -82,14 +78,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 
     @Override

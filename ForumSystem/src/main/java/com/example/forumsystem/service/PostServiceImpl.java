@@ -6,6 +6,7 @@ import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.Post;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.repository.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class PostServiceImpl implements PostService {
     private static final String MODIFY_POST_ERROR_MESSAGE = "Only admin or post creator can modify a post.";
     private final PostRepository postRepository;
 
+    @Autowired
     public PostServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
@@ -81,7 +83,7 @@ public class PostServiceImpl implements PostService {
 
     private void checkModifyPermissions(int postId, User user) {
         Post post = postRepository.getById(postId);
-        if (!(user.isAdmin() || post.getCreatedBy().equals(user))) {
+        if (post.getCreatedBy().equals(user)) {
             throw new UnauthorizedOperationException(MODIFY_POST_ERROR_MESSAGE);
         }
     }

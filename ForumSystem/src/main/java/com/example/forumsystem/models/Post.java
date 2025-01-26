@@ -11,16 +11,16 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
+    @Column(name = "PostID")
     private int id;
 
-    @Column(name = "title")
+    @Column(name = "Title")
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "Content")
     private String content;
 
-    @Column(name = "likes")
+    @Column(name = "Likes")
     private int likes;
 
     @JsonIgnore

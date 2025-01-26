@@ -14,6 +14,10 @@ public class Admin {
     @Column(name = "PhoneNumber")
     private int phone;
 
+    @OneToOne
+    @JoinColumn(name = "isAdmin")
+    private User isAdmin;
+
     public Admin() {
     }
 

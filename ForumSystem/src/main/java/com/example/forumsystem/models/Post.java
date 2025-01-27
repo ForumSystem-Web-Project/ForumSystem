@@ -11,21 +11,21 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PostID")
+    @Column(name = "post_id")
     private int id;
 
-    @Column(name = "Title")
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "Content")
+    @Column(name = "content")
     private String content;
 
-    @Column(name = "Likes")
+    @Column(name = "likes")
     private int likes;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "CreatedBy")
+    @JoinColumn(name = "user_id")
     private User createdBy;
 
     public Post() {

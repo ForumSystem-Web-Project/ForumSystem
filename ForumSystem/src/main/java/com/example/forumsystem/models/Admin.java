@@ -10,14 +10,14 @@ public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "AdminID")
+    @Column(name = "admin_id")
     private int id;
 
-    @Column(name = "PhoneNumber")
+    @Column(name = "phone_number")
     private int phone;
 
     @OneToOne
-    @JoinColumn(name = "isAdmin")
+    @JoinColumn(name = "user_id")
     private User isAdmin;
 
     public Admin() {

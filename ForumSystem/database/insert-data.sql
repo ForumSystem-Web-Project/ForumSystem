@@ -1,4 +1,4 @@
-INSERT INTO Users (FirstName, LastName, Email, Username, Password)
+INSERT INTO forum.users (first_name, last_name, email, username, password)
 VALUES
     ('Johnathan', 'Jefferson', 'johnjefferson@example.com', 'johnjeff123', 'securePass123!'),
     ('Alexandra', 'Smith', 'alexsmith@example.com', 'alexsmith42', 'Passw0rd@2023'),
@@ -6,12 +6,12 @@ VALUES
     ('Catherine', 'White', 'cwhite@example.com', 'cathyW99', 'Cat#456789'),
     ('Michael', 'Taylor', 'michaelt@example.com', 'miketaylor7', 'MikePass123!');
 
-INSERT INTO Admins (AdminID, UserID, PhoneNumber)
+INSERT INTO forum.admins (admin_id, user_id, phone_number)
 VALUES
     (1, 1, '+1234567890'),
     (2, 2, '+9876543210');
 
-INSERT INTO Posts (UserID, Title, Content, Likes)
+INSERT INTO forum.posts (user_id, title, content, likes)
 VALUES
     (3, 'Why Learning SQL Is Important in 2025',
      'SQL remains one of the most crucial skills for data management and analysis...', 15),
@@ -20,7 +20,7 @@ VALUES
     (5, 'Top 10 Places to Visit This Summer',
      'Are you planning your summer vacation? Here are the best places to consider...', 30);
 
-INSERT INTO Comments (PostID, UserID, Content)
+INSERT INTO forum.comments (post_id, user_id, content)
 VALUES
     (1, 2, 'Great article! I found the examples really useful.'),
     (1, 3, 'I totally agree, SQL is essential. Thanks for sharing!'),

@@ -10,18 +10,18 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CommentID")
+    @Column(name = "comment_id")
     private int id;
 
-    @Column(name = "Content")
+    @Column(name = "content")
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "PostID")
+    @JoinColumn(name = "post_id")
     private Post postID;
 
     @OneToOne
-    @JoinColumn(name = "UserID")
+    @JoinColumn(name = "user_id")
     private User userID;
 
     public Comment() {

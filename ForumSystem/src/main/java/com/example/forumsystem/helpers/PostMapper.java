@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ModelMapper {
+public class PostMapper {
 
     private final PostService postService;
     private final CommentService commentService;
 
     @Autowired
-    public ModelMapper(PostService postService, CommentService commentService) {
+    public PostMapper(PostService postService, CommentService commentService) {
         this.postService = postService;
         this.commentService = commentService;
     }
@@ -23,11 +23,10 @@ public class ModelMapper {
         Post post = new Post();
         post.setContent(postDTO.getContent());
         post.setTitle(postDTO.getTitle());
-        post.setLikes(postDTO.getLikes());
         return post;
     }
 
-    public Post fromDto(PostDTO postDTO, int id){
+    public Post fromDto(int id, PostDTO postDTO){
         Post post = fromDto(postDTO);
         post.setId(id);
         Post repositoryPost = postService.getById(id);

@@ -80,7 +80,7 @@ public class UserRestController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBeer(@PathVariable int id) {
+    public void deleteUser(@PathVariable int id) {
         try {
             userService.deleteUser(id);
         } catch (EntityNotFoundException e) {

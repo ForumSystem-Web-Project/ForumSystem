@@ -20,9 +20,6 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "likes")
-    private int likes;
-
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -52,13 +49,13 @@ public class Post {
         this.content = content;
     }
 
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
+//    public int getLikes() {
+//        return likes;
+//    }
+//
+//    public void setLikes(int likes) {
+//        this.likes = likes;
+//    }
 
     public String getContent() {
         return content;

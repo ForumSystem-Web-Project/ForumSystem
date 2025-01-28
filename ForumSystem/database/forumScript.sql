@@ -10,7 +10,7 @@ CREATE TABLE users (
 CREATE TABLE admins (
                         admin_id INT PRIMARY KEY,
                         user_id INT NOT NULL UNIQUE,
-                        phone_number VARCHAR(15) NULL,
+                        phone_number VARCHAR(15) DEFAULT '' NOT NULL,
                         FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 

@@ -52,13 +52,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user) {
-
+    //Creator or Admin check
 
         userRepository.updateUser(user);
     }
 
     @Override
     public void deleteUser(int id) {
+        //Creator or Admin check
+
         userRepository.deleteUser(id);
     }
 }

@@ -94,7 +94,35 @@ public class PostRestController {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postService.getById(id);
             postService.addComment(id, comment);
-            return post;
+            return postDtoOut;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PutMapping("{postId}/likes")
+    public Post likePost (@RequestHeader HttpHeaders headers, @PathVariable int id){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getById(id);
+            postService.likePost(id);
+            return postDtoOut;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PutMapping("{postId}/likes")
+    public Post unlikePost (@RequestHeader HttpHeaders headers, @PathVariable int id){
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getById(id);
+            postService.unlikePost(id);
+            return postDtoOut;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

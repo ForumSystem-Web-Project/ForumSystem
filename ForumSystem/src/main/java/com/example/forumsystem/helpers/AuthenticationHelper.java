@@ -1,6 +1,6 @@
 package com.example.forumsystem.helpers;
 
-import com.example.forumsystem.exeptions.EntityNotFoundExeption;
+import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.UserService;
@@ -37,7 +37,7 @@ public class AuthenticationHelper {
             }
 
             return user;
-        } catch (EntityNotFoundExeption e) {
+        } catch (EntityNotFoundException e) {
             throw new UnauthorizedOperationException(INVALID_AUTHENTICATION_ERROR);
         }
     }

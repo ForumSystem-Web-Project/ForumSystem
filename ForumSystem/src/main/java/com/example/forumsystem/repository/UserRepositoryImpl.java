@@ -1,6 +1,6 @@
 package com.example.forumsystem.repository;
 
-import com.example.forumsystem.exeptions.EntityNotFoundExeption;
+import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,7 +33,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, id);
             if (user == null) {
-                throw new EntityNotFoundExeption("User", id);
+                throw new EntityNotFoundException("User", id);
             }
 
             return user;
@@ -48,7 +48,7 @@ public class UserRepositoryImpl implements UserRepository {
 
             List<User> result = query.list();
             if (result.isEmpty()) {
-                throw new EntityNotFoundExeption("User", "username", username);
+                throw new EntityNotFoundException("User", "username", username);
             }
 
             return result.get(0);
@@ -79,7 +79,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
             User user = session.get(User.class, id);
             if (user == null) {
-                throw new EntityNotFoundExeption("User", id);
+                throw new EntityNotFoundException("User", id);
             }
             session.remove(user);
             session.getTransaction().commit();

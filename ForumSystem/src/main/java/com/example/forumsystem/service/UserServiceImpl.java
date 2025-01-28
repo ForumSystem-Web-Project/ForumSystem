@@ -1,5 +1,7 @@
 package com.example.forumsystem.service;
 
+import com.example.forumsystem.exeptions.DuplicateEntityException;
+import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +36,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user) {
-        userRepository.createUser(user);
+            boolean duplicateExists = true;
+            try {
+                userRepository.getByName(user.getUsername());
+            } catch (EntityNotFoundException e) {
+                duplicateExists = false;
+            }
+
+            if (duplicateExists) {
+                throw new DuplicateEntityException("User", "username", user.getUsername());
+            }
+
+            userRepository.createUser(user);
     }
 
     @Override
     public void updateUser(User user) {
+
+
         userRepository.updateUser(user);
     }
 

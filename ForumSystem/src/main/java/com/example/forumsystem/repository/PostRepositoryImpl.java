@@ -1,6 +1,6 @@
 package com.example.forumsystem.repository;
 
-import com.example.forumsystem.exeptions.EntityNotFoundExeption;
+import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.models.Post;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,7 +33,7 @@ public class PostRepositoryImpl implements PostRepository {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, id);
             if (post == null) {
-                throw new EntityNotFoundExeption("Post", id);
+                throw new EntityNotFoundException("Post", id);
             }
 
             return post;
@@ -48,7 +48,7 @@ public class PostRepositoryImpl implements PostRepository {
             List<Post> result = querry.list();
 
             if (result.isEmpty()) {
-                throw new EntityNotFoundExeption("Post", "title", title);
+                throw new EntityNotFoundException("Post", "title", title);
             }
 
             return result.get(0);

@@ -1,7 +1,7 @@
 package com.example.forumsystem.service;
 
-import com.example.forumsystem.exeptions.DublicateEntityExeption;
-import com.example.forumsystem.exeptions.EntityNotFoundExeption;
+import com.example.forumsystem.exeptions.DuplicateEntityException;
+import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.Post;
 import com.example.forumsystem.models.User;
@@ -42,12 +42,12 @@ public class PostServiceImpl implements PostService {
         boolean duplicateExists = true;
         try {
             postRepository.getByTitle(post.getTitle());
-        } catch (EntityNotFoundExeption e) {
+        } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
 
         if (duplicateExists) {
-            throw new EntityNotFoundExeption("Post", "title", post.getTitle());
+            throw new EntityNotFoundException("Post", "title", post.getTitle());
         }
 
         post.setCreatedBy(user);
@@ -64,12 +64,12 @@ public class PostServiceImpl implements PostService {
             if (existingPost.getId() == post.getId()) {
                 duplicateExists = false;
             }
-        } catch (EntityNotFoundExeption e) {
+        } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
 
         if (duplicateExists) {
-            throw new DublicateEntityExeption("Post", "title", post.getTitle());
+            throw new DuplicateEntityException("Post", "title", post.getTitle());
         }
 
         postRepository.updatePost(post);

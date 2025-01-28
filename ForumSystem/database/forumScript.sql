@@ -19,8 +19,6 @@ CREATE TABLE posts (
                        user_id INT NOT NULL,
                        title VARCHAR(64) NOT NULL CHECK (LENGTH(title) BETWEEN 16 AND 64),
                        content TEXT NOT NULL CHECK (LENGTH(content) BETWEEN 32 AND 8192),
-                       likes INT DEFAULT 0 CHECK (likes >= 0),
-                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                        FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
@@ -29,6 +27,15 @@ CREATE TABLE comments (
                           post_id INT NOT NULL,
                           user_id INT NOT NULL,
                           content TEXT NOT NULL CHECK (LENGTH(content) > 0 AND LENGTH(content) <= 8192),
-                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                           FOREIGN KEY (post_id) REFERENCES posts(post_id),
-                          FOREIGN KEY (user_id) REFERENCES users(user_id));
+                          FOREIGN KEY (user_id) REFERENCES users(user_id)
+                      );
+
+CREATE TABLE likes (
+                       like_id INT PRIMARY KEY AUTO_INCREMENT,
+                       user_id INT NOT NULL,
+                       post_id INT NOT NULL,
+                       FOREIGN KEY (user_id) REFERENCES users(user_id),
+                       FOREIGN KEY (post_id) REFERENCES posts(post_id),
+                       UNIQUE(user_id, post_id)
+);

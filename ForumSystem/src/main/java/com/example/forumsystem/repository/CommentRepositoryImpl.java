@@ -1,6 +1,6 @@
 package com.example.forumsystem.repository;
 
-import com.example.forumsystem.exeptions.EntityNotFoundExeption;
+import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.models.Comment;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -34,7 +34,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             Comment comment = session.get(Comment.class, id);
 
             if (comment == null) {
-                throw new EntityNotFoundExeption("Comment", id);
+                throw new EntityNotFoundException("Comment", id);
             }
 
             return comment;

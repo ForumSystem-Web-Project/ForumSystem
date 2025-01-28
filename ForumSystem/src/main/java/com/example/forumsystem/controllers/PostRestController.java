@@ -1,16 +1,10 @@
 package com.example.forumsystem.controllers;
 
-import com.example.forumsystem.exeptions.DublicateEntityExeption;
-import com.example.forumsystem.exeptions.EntityNotFoundExeption;
+import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.Post;
-import com.example.forumsystem.models.PostDTO;
-import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.PostService;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,7 +31,7 @@ public class PostRestController {
     public Post getPostById(@PathVariable int id) {
         try{
             return postService.getById(id);
-        } catch (EntityNotFoundExeption ex){
+        } catch (EntityNotFoundException ex){
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, ex.getMessage());
         }
@@ -47,7 +41,7 @@ public class PostRestController {
     public Post getUserByTitle(@PathVariable String title) {
         try {
             return postService.getByTitle(title);
-        } catch (EntityNotFoundException e) {
+        } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

@@ -11,14 +11,14 @@ VALUES
     (1, 1, '+1234567890'),
     (2, 2, '+9876543210');
 
-INSERT INTO forum.posts (user_id, title, content, likes)
+INSERT INTO forum.posts (user_id, title, content)
 VALUES
     (3, 'Why Learning SQL Is Important in 2025',
-     'SQL remains one of the most crucial skills for data management and analysis...', 15),
+     'SQL remains one of the most crucial skills for data management and analysis...'),
     (4, 'Tips for Secure Password Management',
-     'Using strong passwords is key to securing your accounts. Here are some tips...', 25),
+     'Using strong passwords is key to securing your accounts. Here are some tips...'),
     (5, 'Top 10 Places to Visit This Summer',
-     'Are you planning your summer vacation? Here are the best places to consider...', 30);
+     'Are you planning your summer vacation? Here are the best places to consider...');
 
 INSERT INTO forum.comments (post_id, user_id, content)
 VALUES
@@ -26,3 +26,10 @@ VALUES
     (1, 3, 'I totally agree, SQL is essential. Thanks for sharing!'),
     (2, 4, 'Thanks for the tips! Password security is so important.'),
     (3, 5, 'This list is amazing! I’m adding these places to my bucket list.');
+
+INSERT INTO forum.likes (user_id, post_id)
+VALUES
+    (1, 1), -- Johnathan Jefferson likes the first post
+    (2, 1), -- Alexandra Smith likes the first post
+    (3, 2), -- Benjamin Brown likes the second post
+    (4, 2); -- Catherine White likes the second post

@@ -10,7 +10,7 @@ public class PermissionHelpers {
     private static final String ANONYMOUS_AUTHORIZATION_ERROR = "Invalid operation. You are not logged in!";
 
 
-    public static void adminCheck (User user){
+    public static void adminCheck (User user) {
 
 
     }

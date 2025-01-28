@@ -12,7 +12,5 @@ public class PermissionHelpers {
 
     public static void adminCheck (User user) {
 
-
-
     }
 }

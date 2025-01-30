@@ -12,3 +12,6 @@ Accessible only if the user is authenticated. The user must be able to log in an
 -Administrative part 
 
 Accessible to users with administrative privileges. Admin must be able to search for a user by their username, email, first name. Admin must be able to block or unblock individual users. A blocked user must not be able to create posts or comments. Admin must be able to delete any post. Admin must be able to view a list of all posts with an option to filter and sort them.
+
+![database_screen](https://github.com/user-attachments/assets/cc129bec-f92c-4187-8058-fc7c0bb58e6c)
+

@@ -29,7 +29,23 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "is_admin")
+    private boolean isAdmin;
+
+    @Column(name = "is_blocked")
+    private boolean isBlocked;
+
     public User() {
+    }
+
+    public User(String firstName, String lastName, int id, String email, String password, boolean isAdmin, boolean isBlocked) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.isAdmin = isAdmin;
+        this.isBlocked = isBlocked;
     }
 
     public int getId() {
@@ -78,6 +94,22 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 
     @Override

@@ -1,24 +1,24 @@
-INSERT INTO forum.users (first_name, last_name, email, username, password)
+INSERT INTO forum.users (first_name, last_name, email, username, password, is_blocked, is_admin)
 VALUES
-    ('Johnathan', 'Jefferson', 'johnjefferson@example.com', 'johnjeff123', 'securePass123!'),
-    ('Alexandra', 'Smith', 'alexsmith@example.com', 'alexsmith42', 'Passw0rd@2023'),
-    ('Benjamin', 'Brown', 'benbrown@example.com', 'benbrown21', 'Brownie$2023'),
-    ('Catherine', 'White', 'cwhite@example.com', 'cathyW99', 'Cat#456789'),
-    ('Michael', 'Taylor', 'michaelt@example.com', 'miketaylor7', 'MikePass123!');
+    ('Johnathan', 'Jefferson', 'johnjefferson@example.com', 'johnjeff123', 'securePass123!', false, true),
+    ('Alexandra', 'Smith', 'alexsmith@example.com', 'alexsmith42', 'Passw0rd@2023', false, true),
+    ('Benjamin', 'Brown', 'benbrown@example.com', 'benbrown21', 'Brownie$2023', false, false),
+    ('Catherine', 'White', 'cwhite@example.com', 'cathyW99', 'Cat#456789', false, false),
+    ('Michael', 'Taylor', 'michaelt@example.com', 'miketaylor7', 'MikePass123!', false, false);
 
-INSERT INTO forum.admins (admin_id, user_id, phone_number)
+INSERT INTO forum.phone_numbers (phone_number, user_id)
 VALUES
-    (1, 1, '+1234567890'),
-    (2, 2, '+9876543210');
+    ('+1234567890', 1),
+    ('+9876543210', 2);
 
-INSERT INTO forum.posts (user_id, title, content)
+INSERT INTO forum.posts (user_id, title, content, timestamp)
 VALUES
     (3, 'Why Learning SQL Is Important in 2025',
-     'SQL remains one of the most crucial skills for data management and analysis...'),
+     'SQL remains one of the most crucial skills for data management and analysis...', '2025-01-29 16:22:00'),
     (4, 'Tips for Secure Password Management',
-     'Using strong passwords is key to securing your accounts. Here are some tips...'),
+     'Using strong passwords is key to securing your accounts. Here are some tips...', '2025-01-29 16:22:00'),
     (5, 'Top 10 Places to Visit This Summer',
-     'Are you planning your summer vacation? Here are the best places to consider...');
+     'Are you planning your summer vacation? Here are the best places to consider...', '2025-01-29 16:22:00');
 
 INSERT INTO forum.comments (post_id, user_id, content)
 VALUES

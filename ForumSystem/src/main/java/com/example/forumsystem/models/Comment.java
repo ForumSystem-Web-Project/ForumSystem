@@ -20,9 +20,9 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post postID;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userID;
+    private User createdBy;
 
     public Comment() {
 
@@ -52,12 +52,12 @@ public class Comment {
         this.postID = postID;
     }
 
-    public User getUserID() {
-        return userID;
+    public User getCreatedBy() {
+        return createdBy;
     }
 
-    public void setUserID(User userID) {
-        this.userID = userID;
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override

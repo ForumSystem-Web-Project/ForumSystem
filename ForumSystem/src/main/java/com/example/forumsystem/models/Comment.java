@@ -11,14 +11,14 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private int id;
+    private int commentId;
 
     @Column(name = "content")
     private String content;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post postID;
+    private Post postId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -28,12 +28,12 @@ public class Comment {
 
     }
 
-    public int getId() {
-        return id;
+    public int getCommentId() {
+        return commentId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCommentId(int commentId) {
+        this.commentId = commentId;
     }
 
     public String getContent() {
@@ -45,11 +45,11 @@ public class Comment {
     }
 
     public Post getPostID() {
-        return postID;
+        return postId;
     }
 
     public void setPostID(Post postID) {
-        this.postID = postID;
+        this.postId = postID;
     }
 
     public User getCreatedBy() {
@@ -65,11 +65,11 @@ public class Comment {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comment comment = (Comment) o;
-        return id == comment.id;
+        return commentId == comment.commentId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(commentId);
     }
 }

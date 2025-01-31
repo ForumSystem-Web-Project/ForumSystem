@@ -7,6 +7,7 @@ import com.example.forumsystem.helpers.AuthenticationHelper;
 import com.example.forumsystem.helpers.PostMapper;
 import com.example.forumsystem.models.Comment;
 import com.example.forumsystem.models.Post;
+import com.example.forumsystem.models.PostDTO;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.PostService;
 import jakarta.validation.Valid;
@@ -49,12 +50,12 @@ public class PostRestController {
     }
 
     @PostMapping
-    public Post createPost(@RequestHeader HttpHeaders headers @Valid @RequestBody PostDto postDto) {
+    public Post createPost(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDTO postDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postMapper.fromDto(postDto);
             postService.createPost(post, user);
-            return post;
+            return postDtoOut;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -63,12 +64,12 @@ public class PostRestController {
     }
 
     @PutMapping("/{id}")
-    public Post updatePost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto) {
+    public Post updatePost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDTO postDto) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(headers);`
             Post post = postMapper.fromDto(id, postDto);
             postService.updatePost(post, user);
-            return post;
+            return postDtoOut;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -94,6 +95,20 @@ public class PostRestController {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postService.getById(id);
             postService.addComment(id, comment);
+            return postDtoOut;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PostMapping("{postId}/comments")
+    public Post removeComment(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody Comment comment) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postService.getById(id);
+            postService.removeComment(id, comment);
             return postDtoOut;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

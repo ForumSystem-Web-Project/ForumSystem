@@ -25,42 +25,88 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(User modifier, int id) {
+        //Creator or Admin check
         return userRepository.getById(id);
     }
 
     @Override
-    public User getByName(String username) {
-        return userRepository.getByName(username);
+    public User getByUsername(User modifier, String username) {
+        //Creator or Admin check
+        return userRepository.getByUsername(username);
+    }
+
+    @Override
+    public User getByEmail(User modifier, String email) {
+        //Creator or Admin check
+        return userRepository.getByEmail(email);
+    }
+
+    @Override
+    public User getByFirstName(User modifier, String firstName) {
+        //Creator or Admin check
+        return userRepository.getByFirstName(firstName);
     }
 
     @Override
     public void createUser(User user) {
+        //Creator or Admin check
             boolean duplicateExists = true;
+            boolean duplicateExists2 = true;
             try {
-                userRepository.getByName(user.getUsername());
+                userRepository.getByUsername(user.getUsername());
+
             } catch (EntityNotFoundException e) {
                 duplicateExists = false;
+
+
+            } try {
+                userRepository.getByEmail(user.getEmail());
+
+            } catch (EntityNotFoundException e) {
+            duplicateExists2 = false;
             }
+
 
             if (duplicateExists) {
                 throw new DuplicateEntityException("User", "username", user.getUsername());
+
+            } else if (duplicateExists2){
+                throw new DuplicateEntityException("User", "email", user.getEmail());
             }
 
             userRepository.createUser(user);
     }
 
     @Override
-    public void updateUser(User user) {
+    public void updateUser(User user, User modifier, int id) {
     //Creator or Admin check
+        // Needs an updateUserDTO to avoid updating the username
+        boolean duplicateExists = true;
+        try {
+            User existingUser = userRepository.getByEmail(user.getEmail());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("User", "email", user.getEmail());
+        }
 
         userRepository.updateUser(user);
     }
 
     @Override
-    public void deleteUser(int id) {
+    public void deleteUser(User modifier, int id) {
         //Creator or Admin check
 
         userRepository.deleteUser(id);
+    }
+
+    @Override
+    public void blockUser (User admin, int id) {
+        //Admin check
+
+
     }
 }

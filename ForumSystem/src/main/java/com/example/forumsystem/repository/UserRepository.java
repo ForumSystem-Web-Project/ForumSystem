@@ -10,7 +10,11 @@ public interface UserRepository {
 
     User getById(int id);
 
-    User getByName(String username);
+    User getByUsername(String username);
+
+    User getByEmail(String email);
+
+    User getByFirstName(String firstName);
 
     void createUser(User user);
 

@@ -10,11 +10,15 @@ public interface UserService {
 
     User getById(int id);
 
-    User getByName(String username);
+    User getByUsername(String username);
+
+    User getByEmail(String email);
+
+    User getByFirstName(String firstName);
 
     void createUser(User user);
 
-    void updateUser(User user);
+    void updateUser(User user, User modifier, int id);
 
     void deleteUser(int id);
 }

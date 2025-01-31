@@ -43,7 +43,7 @@ public class UserRestController {
     @GetMapping("/{username}")
     public User getUserByName(@PathVariable String username) {
         try {
-            return userService.getByName(username);
+            return userService.getByUsername(username);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

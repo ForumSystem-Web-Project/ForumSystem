@@ -1,5 +1,7 @@
 package com.example.forumsystem.helpers;
 
+import com.example.forumsystem.exeptions.UnauthorizedOperationException;
+import com.example.forumsystem.models.Post;
 import com.example.forumsystem.models.User;
 
 public class PermissionHelpers {
@@ -11,7 +13,24 @@ public class PermissionHelpers {
     private static final String ANONYMOUS_AUTHORIZATION_ERROR = "Invalid operation. You are not logged in!";
 
 
-    public static void adminCheck (User user) {
-        if (!user.is)
+    public static void checkIfAdmin(User user) {
+        if (!user.isAdmin()) {
+            throw new UnauthorizedOperationException(AUTHORIZATION_PERMISSION_ERROR);
+        }
     }
+
+    public static void checkIfBlocked(User user) {
+        if (user.isBlocked()) {
+            throw new UnauthorizedOperationException(BLOCKED_USER_ERROR);
+        }
+    }
+
+    public static void checkIfCreator(Post post, User user) {
+
+        if (!user.equals(post.getCreatedBy())){
+            throw new UnauthorizedOperationException(CREATOR_AUTHORIZATION_ERROR);
+        }
+    }
+
+
 }

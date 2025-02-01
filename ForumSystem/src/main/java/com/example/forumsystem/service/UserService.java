@@ -8,17 +8,25 @@ public interface UserService {
 
     List<User> getAll();
 
-    User getById(int id);
+    User getById(User modifier, int id);
 
-    User getByUsername(String username);
+    User getByUsername(User admin, String username);
 
-    User getByEmail(String email);
+    User getByEmail(User admin, String email);
 
-    User getByFirstName(String firstName);
+    User getByFirstName(User admin, String firstName);
 
     void createUser(User user);
 
     void updateUser(User user, User modifier, int id);
 
-    void deleteUser(int id);
+    void deleteUser(User modifier, int id);
+
+    void makeAdmin (User admin, int id);
+
+    void removeAdmin (User admin, int id);
+
+    void blockUser (User admin, int id);
+
+    void unblockUser (User admin, int id);
 }

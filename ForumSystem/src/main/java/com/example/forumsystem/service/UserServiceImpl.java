@@ -2,6 +2,7 @@ package com.example.forumsystem.service;
 
 import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
+import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,53 +26,61 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(User modifier, int id) {
-        //Creator or Admin check
+    public User getById(User admin, int id) {
+
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
         return userRepository.getById(id);
     }
 
     @Override
-    public User getByUsername(User modifier, String username) {
-        //Creator or Admin check
+    public User getByUsername(User admin, String username) {
+
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
         return userRepository.getByUsername(username);
     }
 
     @Override
-    public User getByEmail(User modifier, String email) {
-        //Creator or Admin check
+    public User getByEmail(User admin, String email) {
+
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
         return userRepository.getByEmail(email);
     }
 
     @Override
-    public User getByFirstName(User modifier, String firstName) {
-        //Creator or Admin check
+    public User getByFirstName(User admin, String firstName) {
+
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
         return userRepository.getByFirstName(firstName);
     }
 
     @Override
     public void createUser(User user) {
-        //Creator or Admin check
-            boolean duplicateExists = true;
-            boolean duplicateExists2 = true;
+
+            boolean usernameExists = true;
+            boolean emailExists = true;
             try {
                 userRepository.getByUsername(user.getUsername());
 
             } catch (EntityNotFoundException e) {
-                duplicateExists = false;
+                usernameExists = false;
 
 
             } try {
                 userRepository.getByEmail(user.getEmail());
 
             } catch (EntityNotFoundException e) {
-            duplicateExists2 = false;
+            emailExists = false;
             }
 
 
-            if (duplicateExists) {
+            if (usernameExists) {
                 throw new DuplicateEntityException("User", "username", user.getUsername());
 
-            } else if (duplicateExists2){
+            } else if (emailExists){
                 throw new DuplicateEntityException("User", "email", user.getEmail());
             }
 
@@ -80,7 +89,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user, User modifier, int id) {
-    //Creator or Admin check
+
+        PermissionHelpers.checkIfBlocked(modifier);
+        PermissionHelpers.checkIfCreatorForUsers(user, modifier);
+        PermissionHelpers.checkIfAdmin(modifier);
         // Needs an updateUserDTO to avoid updating the username
         boolean duplicateExists = true;
         try {
@@ -97,16 +109,60 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(User modifier, int id) {
-        //Creator or Admin check
+    public void deleteUser(User admin, int id) {
 
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
         userRepository.deleteUser(id);
     }
 
     @Override
-    public void blockUser (User admin, int id) {
-        //Admin check
+    public void makeAdmin (User admin, int id) {
 
-
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
+        User user = userRepository.getById(id);
+        user.setAdmin(true);
+        userRepository.updateUser(user);
     }
+
+    @Override
+    public void removeAdmin (User admin, int id) {
+
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
+        User user = userRepository.getById(id);
+        user.setAdmin(false);
+        userRepository.updateUser(user);
+    }
+
+    @Override
+    public void blockUser (User admin, int id) {
+
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
+        User user = userRepository.getById(id);
+        user.setBlocked(true);
+        userRepository.updateUser(user);
+    }
+
+    @Override
+    public void unblockUser (User admin, int id) {
+
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
+        User user = userRepository.getById(id);
+        user.setBlocked(false);
+        userRepository.updateUser(user);
+    }
+
+//    @Override
+//    public void addPhoneNumber (User admin, int id) {
+//
+//        PermissionHelpers.checkIfBlocked(admin);
+//        PermissionHelpers.checkIfAdmin(admin);
+//        User user = userRepository.getById(id);
+//        user.setBlocked(true);
+//        userRepository.updateUser(user);
+//    }
 }

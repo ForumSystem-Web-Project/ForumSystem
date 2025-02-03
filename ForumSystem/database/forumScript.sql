@@ -6,8 +6,7 @@ CREATE TABLE users (
                        username VARCHAR(32) NOT NULL UNIQUE,
                        password VARCHAR(255) NOT NULL,
                        is_admin BOOLEAN NOT NULL,
-                       is_blocked BOOLEAN NOT NULL,
-                       has_phone_number BOOLEAN NOT NULL
+                       is_blocked BOOLEAN NOT NULL
 );
 
 CREATE TABLE  phone_numbers

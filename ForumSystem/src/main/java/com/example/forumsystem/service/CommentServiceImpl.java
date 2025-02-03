@@ -1,6 +1,9 @@
 package com.example.forumsystem.service;
 
+import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.Comment;
+import com.example.forumsystem.models.Post;
+import com.example.forumsystem.models.User;
 import com.example.forumsystem.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +28,39 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment getById(int id) {
         return commentRepository.getById(id);
+    }
+
+    @Override
+    public List<Comment> getByPost(Post post) {
+        return commentRepository.getByPost(post);
+    }
+
+    @Override
+    public List<Comment> getByUser(User user) {
+        return commentRepository.getByUser(user);
+    }
+
+    @Override
+    public void createComment(User user, Post post, Comment comment) {
+        PermissionHelpers.checkIfBlocked(user);
+        comment.setPostID(post);
+        comment.setCreatedBy(user);
+        commentRepository.create(comment);
+    }
+
+    @Override
+    public void updateComment (User user, Comment comment) {
+        PermissionHelpers.checkIfBlocked(user);
+        PermissionHelpers.checkIfCreatorOrAdmin(comment.getCreatedBy().getId(), user);
+        commentRepository.update(comment);
+    }
+
+    @Override
+    public void deleteComment (User user, int id) {
+        Comment comment = commentRepository.getById(id);
+
+        PermissionHelpers.checkIfBlocked(user);
+        PermissionHelpers.checkIfCreatorOrAdmin(comment.getCreatedBy().getId(), user);
+        commentRepository.delete(comment);
     }
 }

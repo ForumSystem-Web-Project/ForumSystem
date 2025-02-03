@@ -35,13 +35,10 @@ public class User {
     @Column(name = "is_blocked")
     private boolean isBlocked;
 
-    @Column(name = "has_phone_number")
-    private boolean hasPhoneNumber;
-
     public User() {
     }
 
-    public User(String firstName, String lastName, int id, String email, String password, boolean isAdmin, boolean isBlocked, boolean hasPhoneNumber) {
+    public User(String firstName, String lastName, int id, String email, String password, boolean isAdmin, boolean isBlocked) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = id;
@@ -49,7 +46,6 @@ public class User {
         this.password = password;
         this.isAdmin = isAdmin;
         this.isBlocked = isBlocked;
-        this.hasPhoneNumber = hasPhoneNumber;
     }
 
     public int getId() {
@@ -114,14 +110,6 @@ public class User {
 
     public void setBlocked(boolean blocked) {
         isBlocked = blocked;
-    }
-
-    public boolean hasPhoneNumber() {
-        return hasPhoneNumber;
-    }
-
-    public void setHasPhoneNumber(boolean phoneNumber) {
-        hasPhoneNumber = phoneNumber;
     }
 
     @Override

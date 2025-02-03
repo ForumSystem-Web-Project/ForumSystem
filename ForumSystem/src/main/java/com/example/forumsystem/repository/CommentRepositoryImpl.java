@@ -2,6 +2,8 @@ package com.example.forumsystem.repository;
 
 import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.models.Comment;
+import com.example.forumsystem.models.Post;
+import com.example.forumsystem.models.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -29,6 +31,30 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
+    public List<Comment> getByPost(Post post) {
+        try (Session session = sessionFactory.openSession()) {
+
+            String hql = "FROM Comment WHERE postId = :id";
+            Query<Comment> query = session.createQuery(hql, Comment.class);
+            query.setParameter("id", post.getId());
+
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public List<Comment> getByUser(User user) {
+        try (Session session = sessionFactory.openSession()) {
+
+            String hql = "FROM Comment WHERE createdBy.id = :id";
+            Query<Comment> query = session.createQuery(hql, Comment.class);
+            query.setParameter("id", user.getId());
+
+            return query.getResultList();
+        }
+    }
+
+    @Override
     public Comment getById(int id) {
         try (Session session = sessionFactory.openSession()) {
             Comment comment = session.get(Comment.class, id);
@@ -38,6 +64,33 @@ public class CommentRepositoryImpl implements CommentRepository {
             }
 
             return comment;
+        }
+    }
+
+    @Override
+    public void create(Comment comment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(comment);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void update(Comment comment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(comment);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void delete(Comment comment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.remove(comment);
+            session.getTransaction().commit();
         }
     }
 }

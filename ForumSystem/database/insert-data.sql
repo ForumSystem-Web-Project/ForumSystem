@@ -1,10 +1,10 @@
-INSERT INTO forum.users (first_name, last_name, email, username, password, is_blocked, is_admin, has_phone_number)
+INSERT INTO forum.users (first_name, last_name, email, username, password, is_blocked, is_admin)
 VALUES
-    ('Johnathan', 'Jefferson', 'johnjefferson@example.com', 'johnjeff123', 'securePass123!', false, true, 1),
-    ('Alexandra', 'Smith', 'alexsmith@example.com', 'alexsmith42', 'Passw0rd@2023', false, true, 0),
-    ('Benjamin', 'Brown', 'benbrown@example.com', 'benbrown21', 'Brownie$2023', false, false, 0),
-    ('Catherine', 'White', 'cwhite@example.com', 'cathyW99', 'Cat#456789', false, false, 0),
-    ('Michael', 'Taylor', 'michaelt@example.com', 'miketaylor7', 'MikePass123!', false, false, 0);
+    ('Johnathan', 'Jefferson', 'johnjefferson@example.com', 'johnjeff123', 'securePass123!', false, true),
+    ('Alexandra', 'Smith', 'alexsmith@example.com', 'alexsmith42', 'Passw0rd@2023', false, true),
+    ('Benjamin', 'Brown', 'benbrown@example.com', 'benbrown21', 'Brownie$2023', false, false),
+    ('Catherine', 'White', 'cwhite@example.com', 'cathyW99', 'Cat#456789', false, false),
+    ('Michael', 'Taylor', 'michaelt@example.com', 'miketaylor7', 'MikePass123!', false, false);
 
 INSERT INTO forum.phone_numbers (phone_number, user_id)
 VALUES

@@ -18,7 +18,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    private Post postId;
+    private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -45,11 +45,11 @@ public class Comment {
     }
 
     public Post getPostID() {
-        return postId;
+        return post;
     }
 
-    public void setPostID(Post postID) {
-        this.postId = postID;
+    public void setPostID(Post post) {
+        this.post = post;
     }
 
     public User getCreatedBy() {

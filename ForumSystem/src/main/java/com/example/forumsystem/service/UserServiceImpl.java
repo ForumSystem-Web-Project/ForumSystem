@@ -88,11 +88,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User user, User modifier, int id) {
+    public void updateUser(User user, User modifier) {
 
         PermissionHelpers.checkIfBlocked(modifier);
-        PermissionHelpers.checkIfCreatorForUsers(user, modifier);
-        PermissionHelpers.checkIfAdmin(modifier);
+        PermissionHelpers.checkIfCreatorOrAdmin(modifier.getId(), modifier);
         // Needs an updateUserDTO to avoid updating the username
         boolean duplicateExists = true;
         try {
@@ -155,14 +154,4 @@ public class UserServiceImpl implements UserService {
         user.setBlocked(false);
         userRepository.updateUser(user);
     }
-
-//    @Override
-//    public void addPhoneNumber (User admin, int id) {
-//
-//        PermissionHelpers.checkIfBlocked(admin);
-//        PermissionHelpers.checkIfAdmin(admin);
-//        User user = userRepository.getById(id);
-//        user.setBlocked(true);
-//        userRepository.updateUser(user);
-//    }
 }

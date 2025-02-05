@@ -25,4 +25,8 @@ public interface PostService {
     void updateComment (int postId, User user, Comment comment);
 
     void deleteComment (int postId, User user, Comment comment);
+
+    void likePost (int postId, User user);
+
+    void unlikePost (int postId, User user);
 }

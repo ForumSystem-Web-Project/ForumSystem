@@ -110,7 +110,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void likePost (int postId, User user){
+    public void likePost (int postId, User user) {
 
         PermissionHelpers.checkIfBlocked(user);
         Post post = postRepository.getById(postId);
@@ -123,7 +123,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void unlikePost (int postId, User user){
+    public void unlikePost (int postId, User user) {
 
         PermissionHelpers.checkIfBlocked(user);
         Post post = postRepository.getById(postId);

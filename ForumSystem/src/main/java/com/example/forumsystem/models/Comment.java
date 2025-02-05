@@ -44,11 +44,11 @@ public class Comment {
         this.content = content;
     }
 
-    public Post getPostID() {
+    public Post getPost() {
         return post;
     }
 
-    public void setPostID(Post post) {
+    public void setPost(Post post) {
         this.post = post;
     }
 

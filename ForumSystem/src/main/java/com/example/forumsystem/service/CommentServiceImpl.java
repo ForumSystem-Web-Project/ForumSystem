@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void createComment(User user, Post post, Comment comment) {
         PermissionHelpers.checkIfBlocked(user);
-        comment.setPostID(post);
+        comment.setPost(post);
         comment.setCreatedBy(user);
         commentRepository.create(comment);
     }

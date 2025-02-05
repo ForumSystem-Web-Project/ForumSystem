@@ -1,6 +1,8 @@
 package com.example.forumsystem.service;
 
+import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
+import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.PhoneNumber;
 import com.example.forumsystem.models.User;
@@ -13,7 +15,7 @@ import java.util.List;
 @Service
 public class PhoneNumberServiceImpl implements PhoneNumberService {
 
-    private PhoneNumberRepository phoneNumberRepository;
+    private final PhoneNumberRepository phoneNumberRepository;
 
     @Autowired
     public PhoneNumberServiceImpl(PhoneNumberRepository phoneNumberRepository) {
@@ -32,11 +34,6 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
         return phoneNumberRepository.getByUserId(user);
     }
 
-//    public PhoneNumber getByUserId(User user) {
-//        PermissionHelpers.checkIfBlocked(user);
-//        return phoneNumberRepository.getByUserId(user);
-//    }
-
     @Override
     public void createPhoneNumber(User admin, PhoneNumber phoneNumber){
         PermissionHelpers.checkIfBlocked(admin);
@@ -49,6 +46,12 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
             exists = false;
         }
 
+        if (exists){
+            throw new UnauthorizedOperationException("This admin already has a phone number!");
+        }
+
+        phoneNumber.setCreatedBy(admin);
+
         phoneNumberRepository.create(phoneNumber);
     }
 
@@ -56,6 +59,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     public void updatePhoneNumber(User admin, PhoneNumber phoneNumber){
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
+        phoneNumberRepository.getByUserId(admin);
         phoneNumberRepository.update(phoneNumber);
     }
 
@@ -63,6 +67,7 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     public void deletePhoneNumber(User admin, PhoneNumber phoneNumber){
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
+        phoneNumberRepository.getByUserId(admin);
         phoneNumberRepository.delete(phoneNumber);
     }
 }

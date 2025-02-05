@@ -90,7 +90,7 @@ public class PostRestController {
     }
 
     @PostMapping("{postId}/comments")
-    public Post addComment(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody Comment comment) {
+    public Post addComment(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody ) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postService.getById(id);

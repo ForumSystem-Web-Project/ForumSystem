@@ -34,7 +34,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     public List<Comment> getByPost(Post post) {
         try (Session session = sessionFactory.openSession()) {
 
-            String hql = "FROM Comment WHERE postId = :id";
+            String hql = "FROM Comment WHERE post.id = :id";
             Query<Comment> query = session.createQuery(hql, Comment.class);
             query.setParameter("id", post.getId());
 

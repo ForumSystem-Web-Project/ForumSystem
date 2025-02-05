@@ -1,5 +1,6 @@
 package com.example.forumsystem.service;
 
+import com.example.forumsystem.models.Comment;
 import com.example.forumsystem.models.Post;
 import com.example.forumsystem.models.User;
 
@@ -18,4 +19,10 @@ public interface PostService {
     void updatePost(Post post, User user);
 
     void deletePost(int id, User user);
+
+    void addComment (int postId, User user, Comment comment);
+
+    void updateComment (int postId, User user, Comment comment);
+
+    void deleteComment (int postId, User user, Comment comment);
 }

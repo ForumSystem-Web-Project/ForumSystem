@@ -28,10 +28,9 @@ public class PermissionHelpers {
         }
     }
 
-    public static void checkIfCreatorForPosts(Post post, User user) {
-
-        if (!user.equals(post.getCreatedBy())) {
-            throw new UnauthorizedOperationException(CREATOR_AUTHORIZATION_ERROR);
+    public static void checkIfCreatorOrAdminForPosts(User user, Post post) {
+        if (!(user.equals(post.getCreatedBy()) || user.isAdmin())) {
+            throw new UnauthorizedOperationException(AUTHORIZATION_PERMISSION_ERROR);
         }
     }
 

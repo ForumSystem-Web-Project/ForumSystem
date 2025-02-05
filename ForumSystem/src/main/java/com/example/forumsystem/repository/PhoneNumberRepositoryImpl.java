@@ -33,7 +33,7 @@ public class PhoneNumberRepositoryImpl implements PhoneNumberRepository {
     public PhoneNumber getByUserId(User user) {
         try (Session session = sessionFactory.openSession()) {
             Query<PhoneNumber> phone = session.createQuery(
-                    "From PhoneNumber Where createdBy = :user_id", PhoneNumber.class);
+                    "From PhoneNumber Where createdBy.id = :user_id", PhoneNumber.class);
             phone.setParameter("user_id", user.getId());
             return phone
                     .stream()

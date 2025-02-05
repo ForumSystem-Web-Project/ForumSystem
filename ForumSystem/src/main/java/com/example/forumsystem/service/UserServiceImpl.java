@@ -2,6 +2,7 @@ package com.example.forumsystem.service;
 
 import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
+import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.repository.UserRepository;
@@ -96,6 +97,9 @@ public class UserServiceImpl implements UserService {
         boolean duplicateExists = true;
         try {
             User existingUser = userRepository.getByEmail(user.getEmail());
+            if (existingUser.getId() == user.getId()){
+                duplicateExists = false;
+            }
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
@@ -112,6 +116,7 @@ public class UserServiceImpl implements UserService {
 
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
+        User user = userRepository.getById(id);
         userRepository.deleteUser(id);
     }
 
@@ -121,6 +126,9 @@ public class UserServiceImpl implements UserService {
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
         User user = userRepository.getById(id);
+        if (user.isAdmin()){
+            throw new UnauthorizedOperationException("User is already admin!");
+        }
         user.setAdmin(true);
         userRepository.updateUser(user);
     }
@@ -131,6 +139,9 @@ public class UserServiceImpl implements UserService {
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
         User user = userRepository.getById(id);
+        if (!user.isAdmin()){
+            throw new UnauthorizedOperationException("User is already an ordinary user!");
+        }
         user.setAdmin(false);
         userRepository.updateUser(user);
     }
@@ -141,6 +152,9 @@ public class UserServiceImpl implements UserService {
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
         User user = userRepository.getById(id);
+        if (user.isBlocked()){
+            throw new UnauthorizedOperationException("User is already blocked!");
+        }
         user.setBlocked(true);
         userRepository.updateUser(user);
     }
@@ -151,6 +165,9 @@ public class UserServiceImpl implements UserService {
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
         User user = userRepository.getById(id);
+        if (!user.isBlocked()){
+            throw new UnauthorizedOperationException("User is already not blocked!");
+        }
         user.setBlocked(false);
         userRepository.updateUser(user);
     }

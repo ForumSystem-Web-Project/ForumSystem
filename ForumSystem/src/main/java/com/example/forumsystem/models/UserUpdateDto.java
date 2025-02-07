@@ -1,12 +1,11 @@
 package com.example.forumsystem.models;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class UserDTO {
+public class UserUpdateDto {
 
     @NotNull(message = "First name can't be empty")
     @Size(min = 4, max = 32, message = "Name should be between 2 and 20 symbols")
@@ -20,13 +19,10 @@ public class UserDTO {
             flags = Pattern.Flag.CASE_INSENSITIVE)
     private String email;
 
-    @NotNull(message = "Username can not be empty")
-    private String username;
-
-    @NotNull(message = "Password can not be empty")
+    @NotNull(message = "Password cannot be empty")
     private String password;
 
-    public UserDTO() {
+    public UserUpdateDto() {
     }
 
     public String getFirstName() {
@@ -51,14 +47,6 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {

@@ -4,7 +4,11 @@ import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
+import com.example.forumsystem.helpers.UserMapper;
 import com.example.forumsystem.models.User;
+import com.example.forumsystem.models.UserCreateDto;
+import com.example.forumsystem.models.UserDtoOut;
+import com.example.forumsystem.models.UserUpdateDto;
 import com.example.forumsystem.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +30,17 @@ public class UserRestController {
     private final PhoneNumberMapper phoneNumberMapper;
 
     @Autowired
-    public UserRestController(UserService userService, AuthenticationHelper authenticationHelper) {
+    public UserRestController(UserService userService, AuthenticationHelper authenticationHelper, UserMapper userMapper) {
         this.userService = userService;
         this.authorizationHelper = authenticationHelper;
+        this.userMapper = userMapper;
     }
-
+    //Filtering and Sorting
     @GetMapping
     public List<User> getAllUsers(){
         return userService.getAll();
     }
-
+    //Done
     @GetMapping("/{id}")
     public User getUserById(@RequestHeader HttpHeaders headers, @PathVariable int id){
         try {
@@ -47,11 +52,36 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
-    @GetMapping("/{username}")
-    public User getUserByName(@PathVariable String username) {
+    //Done
+    @GetMapping("/username/{username}")
+    public User getUserByUsername(@RequestHeader HttpHeaders headers, @PathVariable String username) {
         try {
-            return userService.getByUsername(username);
+            User admin = authorizationHelper.tryGetUser(headers);
+            return userService.getByUsername(admin, username);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+    //Done
+    @GetMapping("/email/{email}")
+    public User getUserByEmail(@RequestHeader HttpHeaders headers, @PathVariable String email) {
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            return userService.getByEmail(admin, email);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+    //Done
+    @GetMapping("/firstname/{firstname}")
+    public User getUserByFirstName(@RequestHeader HttpHeaders headers, @PathVariable String firstname) {
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            return userService.getByFirstName(admin, firstname);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -60,10 +90,11 @@ public class UserRestController {
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody User user) {
+    public UserDtoOut createUser(@Valid @RequestBody UserCreateDto userCreateDto) {
         try {
-            userService.createUser(user);
-            return user;
+            User newUser = userMapper.createUserFromDto(userCreateDto);
+            userService.createUser(newUser);
+            return userMapper.createDtoOutToObjectForCreate(userCreateDto);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
@@ -74,10 +105,12 @@ public class UserRestController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable int id, @RequestBody User user) {
+    public UserDtoOut updateUser(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody UserUpdateDto userUpdateDto) {
         try {
-            userService.updateUser(user);
-            return user;
+            User modifier = authorizationHelper.tryGetUser(headers);
+            User user = userMapper.createUpdatedUserFromDto(userUpdateDto, id);
+            userService.updateUser(user, modifier);
+            return userMapper.createDtoOutToObjectForUpdate(userUpdateDto, id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {

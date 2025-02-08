@@ -35,10 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByUsername(User admin, String username) {
-
-        PermissionHelpers.checkIfBlocked(admin);
-        PermissionHelpers.checkIfAdmin(admin);
+    public User getByUsername( String username) {
         return userRepository.getByUsername(username);
     }
 

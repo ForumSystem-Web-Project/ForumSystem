@@ -14,10 +14,6 @@ public class PhoneNumber {
     private int phoneNumberId;
 
     @Column(name = "phone_number")
-    //To be put in the DTO:
-    @NotNull
-    @Pattern (regexp = "^\\+?[1-9]\\d{0,2}[\\s.-]?(\\(?\\d{1,4}\\)?)?[\\s.-]?\\d{1,4}[\\s.-]?\\d{1,4}[\\s.-]?\\d{1,9}$",
-            flags = Pattern.Flag.CASE_INSENSITIVE)
     private String phoneNumber;
 
     @OneToOne

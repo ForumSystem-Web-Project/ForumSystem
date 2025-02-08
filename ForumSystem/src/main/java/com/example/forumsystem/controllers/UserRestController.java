@@ -57,7 +57,7 @@ public class UserRestController {
     public User getUserByUsername(@RequestHeader HttpHeaders headers, @PathVariable String username) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
-            return userService.getByUsername(admin, username);
+            return userService.getByUsername(username);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -88,7 +88,7 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
+    //Done
     @PostMapping
     public UserDtoOut createUser(@Valid @RequestBody UserCreateDto userCreateDto) {
         try {
@@ -103,7 +103,7 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
+    //Done
     @PutMapping("/{id}")
     public UserDtoOut updateUser(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody UserUpdateDto userUpdateDto) {
         try {
@@ -120,10 +120,61 @@ public class UserRestController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable int id) {
+    @PutMapping("/makeAdmin/{id}")
+    public void makeUserAdmin(@RequestHeader HttpHeaders headers, @PathVariable int id){
         try {
-            userService.deleteUser(id);
+            User admin = authorizationHelper.tryGetUser(headers);
+            userService.makeAdmin(admin, id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PutMapping("/removeAdmin/{id}")
+    public void removeUserAdmin(@RequestHeader HttpHeaders headers, @PathVariable int id){
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            userService.removeAdmin(admin, id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PutMapping("/blockUser/{id}")
+    public void blockUser (@RequestHeader HttpHeaders headers, @PathVariable int id){
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            userService.blockUser(admin, id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PutMapping("/unblockUser/{id}")
+    public void unblockUser (@RequestHeader HttpHeaders headers, @PathVariable int id){
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            userService.unblockUser(admin, id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    //PhoneNumber CRUD to be added
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            userService.deleteUser(admin, id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

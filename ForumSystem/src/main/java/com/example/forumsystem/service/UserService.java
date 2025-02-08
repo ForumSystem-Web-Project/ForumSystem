@@ -10,7 +10,7 @@ public interface UserService {
 
     User getById(User modifier, int id);
 
-    User getByUsername(User admin, String username);
+    User getByUsername(String username);
 
     User getByEmail(User admin, String email);
 

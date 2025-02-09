@@ -24,7 +24,7 @@ CREATE TABLE posts (
                        user_id INT NOT NULL,
                        title VARCHAR(64) NOT NULL CHECK (LENGTH(title) BETWEEN 16 AND 64),
                        content TEXT NOT NULL CHECK (LENGTH(content) BETWEEN 32 AND 8192),
-                       timestamp TIMESTAMP DEFAULT current_timestamp,
+                       createdAt TIMESTAMP DEFAULT current_timestamp,
                        CONSTRAINT posts_users_user_id_fk
                            FOREIGN KEY (user_id) REFERENCES users (user_id)
                                ON DELETE CASCADE

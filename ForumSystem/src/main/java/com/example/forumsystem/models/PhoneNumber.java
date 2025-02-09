@@ -1,5 +1,6 @@
 package com.example.forumsystem.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -11,6 +12,7 @@ public class PhoneNumber {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "phone_number_id")
+    @JsonIgnore
     private int phoneNumberId;
 
     @Column(name = "phone_number")
@@ -18,6 +20,7 @@ public class PhoneNumber {
 
     @OneToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User createdBy;
 
     public PhoneNumber() {
@@ -35,7 +38,7 @@ public class PhoneNumber {
         return phoneNumber;
     }
 
-    public void setPhoneNumber() {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

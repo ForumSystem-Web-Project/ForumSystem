@@ -44,6 +44,19 @@ public class PhoneNumberRepositoryImpl implements PhoneNumberRepository {
     }
 
     @Override
+    public PhoneNumber getByPhoneNumber (PhoneNumber phoneNumber) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<PhoneNumber> phone = session.createQuery("From PhoneNumber where phoneNumber = :phone_number", PhoneNumber.class);
+            phone.setParameter("phone_number", phoneNumber.getPhoneNumber());
+            return phone
+                    .stream()
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException("User", "phone number",
+                            String.valueOf(phoneNumber.getPhoneNumber())));
+        }
+    }
+
+    @Override
     public void create(PhoneNumber phoneNumber) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();

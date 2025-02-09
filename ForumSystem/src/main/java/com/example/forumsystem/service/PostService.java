@@ -14,6 +14,10 @@ public interface PostService {
 
     Post getByTitle(String title);
 
+    List<Post> getMostCommentedPosts();
+
+    List<Post> getMostRecentPosts();
+
     void createPost(Post post, User user);
 
     void updatePost(Post post, User user);

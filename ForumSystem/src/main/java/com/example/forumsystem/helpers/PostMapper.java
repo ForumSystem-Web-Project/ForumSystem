@@ -1,7 +1,8 @@
 package com.example.forumsystem.helpers;
 
 import com.example.forumsystem.models.Post;
-import com.example.forumsystem.models.PostDTO;
+import com.example.forumsystem.models.PostDto;
+import com.example.forumsystem.models.PostDtoOut;
 import com.example.forumsystem.service.CommentService;
 import com.example.forumsystem.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +20,26 @@ public class PostMapper {
         this.commentService = commentService;
     }
 
-    public Post fromDto(PostDTO postDTO){
+    public Post fromDtoForCreation(PostDto postDTO){
         Post post = new Post();
         post.setContent(postDTO.getContent());
         post.setTitle(postDTO.getTitle());
         return post;
     }
 
-    public Post fromDto(int id, PostDTO postDTO){
-        Post post = fromDto(postDTO);
-        post.setId(id);
-        Post repositoryPost = postService.getById(id);
-        post.setCreatedBy(repositoryPost.getCreatedBy());
+    public Post fromDtoForUpdate(int id, PostDto postDto){
+        Post post = postService.getById(id);
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
         return post;
+    }
+
+    public PostDtoOut toDtoOut(Post post) {
+        PostDtoOut postDtoOut = new PostDtoOut();
+        postDtoOut.setTitle(post.getTitle());
+        postDtoOut.setContent(post.getContent());
+        postDtoOut.setCreatedBy(post.getCreatedBy().getUsername());
+        postDtoOut.setCreatedAt(post.getCreatedAt());
+        return postDtoOut;
     }
 }

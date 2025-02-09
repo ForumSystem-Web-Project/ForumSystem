@@ -11,6 +11,8 @@ public interface PhoneNumberRepository {
 
     PhoneNumber getByUserId(User user);
 
+    PhoneNumber getByPhoneNumber (PhoneNumber phoneNumber);
+
     void create(PhoneNumber phoneNumber);
 
     void update(PhoneNumber phoneNumber);

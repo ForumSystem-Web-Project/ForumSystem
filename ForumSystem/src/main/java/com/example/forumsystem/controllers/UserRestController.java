@@ -2,13 +2,13 @@ package com.example.forumsystem.controllers;
 
 import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
+import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
+import com.example.forumsystem.helpers.PhoneNumberMapper;
 import com.example.forumsystem.helpers.UserMapper;
-import com.example.forumsystem.models.User;
-import com.example.forumsystem.models.UserCreateDto;
-import com.example.forumsystem.models.UserDtoOut;
-import com.example.forumsystem.models.UserUpdateDto;
+import com.example.forumsystem.models.*;
+import com.example.forumsystem.service.PhoneNumberService;
 import com.example.forumsystem.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +30,13 @@ public class UserRestController {
     private final PhoneNumberMapper phoneNumberMapper;
 
     @Autowired
-    public UserRestController(UserService userService, AuthenticationHelper authenticationHelper, UserMapper userMapper) {
+    public UserRestController(UserService userService, AuthenticationHelper authenticationHelper, UserMapper userMapper,
+                              PhoneNumberService phoneNumberService, PhoneNumberMapper phoneNumberMapper) {
         this.userService = userService;
         this.authorizationHelper = authenticationHelper;
         this.userMapper = userMapper;
+        this.phoneNumberService = phoneNumberService;
+        this.phoneNumberMapper = phoneNumberMapper;
     }
     //Filtering and Sorting
     @GetMapping
@@ -120,8 +123,20 @@ public class UserRestController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            userService.deleteUser(admin, id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
     @PutMapping("/makeAdmin/{id}")
-    public void makeUserAdmin(@RequestHeader HttpHeaders headers, @PathVariable int id){
+    public void makeUserAdmin(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
             userService.makeAdmin(admin, id);
@@ -129,11 +144,13 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/removeAdmin/{id}")
-    public void removeUserAdmin(@RequestHeader HttpHeaders headers, @PathVariable int id){
+    public void removeUserAdmin(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
             userService.removeAdmin(admin, id);
@@ -141,11 +158,13 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/blockUser/{id}")
-    public void blockUser (@RequestHeader HttpHeaders headers, @PathVariable int id){
+    public void blockUser (@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
             userService.blockUser(admin, id);
@@ -153,11 +172,13 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PutMapping("/unblockUser/{id}")
-    public void unblockUser (@RequestHeader HttpHeaders headers, @PathVariable int id){
+    public void unblockUser (@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
             userService.unblockUser(admin, id);
@@ -165,16 +186,60 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
-    //PhoneNumber CRUD to be added
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    @GetMapping("/phoneNumber")
+    public PhoneNumber getAdminPhoneNumber(@RequestHeader HttpHeaders headers) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
-            userService.deleteUser(admin, id);
+            return phoneNumberService.getByUserId(admin);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @PostMapping("/phoneNumber")
+    public PhoneNumber createPhone(@RequestHeader HttpHeaders headers, @RequestBody PhoneNumberDto phoneNumberDto) {
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            PhoneNumber phoneNumber = phoneNumberMapper.map(phoneNumberDto);
+            phoneNumberService.createPhoneNumber(admin, phoneNumber);
+            return phoneNumber;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @PutMapping("/phoneNumber")
+    public PhoneNumber updatePhone(@RequestHeader HttpHeaders headers, @RequestBody PhoneNumberDto phoneNumberDto) {
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            PhoneNumber phoneNumber = phoneNumberMapper.map(phoneNumberDto);
+            phoneNumberService.updatePhoneNumber(admin, phoneNumber);
+            return phoneNumber;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/phoneNumber")
+    public void deletePhone(@RequestHeader HttpHeaders headers){
+        try {
+            User admin = authorizationHelper.tryGetUser(headers);
+            phoneNumberService.deletePhoneNumber(admin);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

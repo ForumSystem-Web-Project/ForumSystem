@@ -11,7 +11,7 @@ VALUES
     ('+1234567890', 1),
     ('+9876543210', 2);
 
-INSERT INTO forum.posts (user_id, title, content, timestamp)
+INSERT INTO forum.posts (user_id, title, content, createdAt)
 VALUES
     (3, 'Why Learning SQL Is Important in 2025',
      'SQL remains one of the most crucial skills for data management and analysis...', '2025-01-29 16:22:00'),

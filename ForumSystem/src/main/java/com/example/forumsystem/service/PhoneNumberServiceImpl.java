@@ -2,7 +2,7 @@ package com.example.forumsystem.service;
 
 import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
-import com.example.forumsystem.exeptions.UnauthorizedOperationException;
+import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.PhoneNumber;
 import com.example.forumsystem.models.User;
@@ -28,26 +28,42 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     }
 
     @Override
-    public PhoneNumber getByUserId(User admin, User user) {
+    public PhoneNumber getByUserId(User admin) {
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
-        return phoneNumberRepository.getByUserId(user);
+        return phoneNumberRepository.getByUserId(admin);
+    }
+
+    @Override
+    public PhoneNumber getByPhoneNumber (User admin, PhoneNumber phoneNumber) {
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
+        return phoneNumberRepository.getByPhoneNumber(phoneNumber);
     }
 
     @Override
     public void createPhoneNumber(User admin, PhoneNumber phoneNumber){
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
-        boolean exists = true;
+        boolean adminHasPhoneNumber = true;
+        boolean anotherAdminHasPhoneNumber = true;
 
         try {
             phoneNumberRepository.getByUserId(admin);
-        } catch (EntityNotFoundException e){
-            exists = false;
+        } catch (EntityNotFoundException e) {
+            adminHasPhoneNumber = false;
         }
 
-        if (exists){
-            throw new UnauthorizedOperationException("This admin already has a phone number!");
+        try {
+            phoneNumberRepository.getByPhoneNumber(phoneNumber);
+        } catch (EntityNotFoundException e) {
+            anotherAdminHasPhoneNumber = false;
+        }
+
+        if (adminHasPhoneNumber) {
+            throw new InvalidOperationException("This admin already has a phone number!");
+        } else if (anotherAdminHasPhoneNumber) {
+            throw new DuplicateEntityException("Admin", "phone number", phoneNumber.getPhoneNumber());
         }
 
         phoneNumber.setCreatedBy(admin);
@@ -59,15 +75,25 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     public void updatePhoneNumber(User admin, PhoneNumber phoneNumber){
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
-        phoneNumberRepository.getByUserId(admin);
+        boolean exists = true;
+        try {
+            phoneNumberRepository.getByUserId(admin);
+        } catch (EntityNotFoundException e){
+            exists = false;
+        }
+
+        if (exists){
+            throw new DuplicateEntityException("Admin", "phone number", phoneNumber.getPhoneNumber());
+        }
+
         phoneNumberRepository.update(phoneNumber);
     }
 
     @Override
-    public void deletePhoneNumber(User admin, PhoneNumber phoneNumber){
+    public void deletePhoneNumber(User admin){
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
-        phoneNumberRepository.getByUserId(admin);
+        PhoneNumber phoneNumber = phoneNumberRepository.getByUserId(admin);
         phoneNumberRepository.delete(phoneNumber);
     }
 }

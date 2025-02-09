@@ -1,6 +1,5 @@
 package com.example.forumsystem.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -31,7 +30,7 @@ public class Post {
 
     @CreationTimestamp
     @Column(name = "timestamp")
-    private Timestamp timestamp;
+    private Timestamp createdAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "likes",
@@ -82,12 +81,12 @@ public class Post {
         this.createdBy = createdBy;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Set<User> getLikes() {

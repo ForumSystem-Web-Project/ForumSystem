@@ -8,11 +8,13 @@ import java.util.List;
 public interface PhoneNumberService {
     List<PhoneNumber> getAll();
 
-    PhoneNumber getByUserId(User admin, User user);
+    PhoneNumber getByUserId(User admin);
+
+    PhoneNumber getByPhoneNumber (User admin, PhoneNumber phoneNumber);
 
     void createPhoneNumber(User admin, PhoneNumber phoneNumber);
 
     void updatePhoneNumber(User admin, PhoneNumber phoneNumber);
 
-    void deletePhoneNumber(User admin, PhoneNumber phoneNumber);
+    void deletePhoneNumber(User admin);
 }

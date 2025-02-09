@@ -1,14 +1,12 @@
 package com.example.forumsystem.controllers;
 
-import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
+import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
 import com.example.forumsystem.helpers.PostMapper;
-import com.example.forumsystem.models.Comment;
-import com.example.forumsystem.models.Post;
-import com.example.forumsystem.models.PostDTO;
-import com.example.forumsystem.models.User;
+import com.example.forumsystem.models.*;
+import com.example.forumsystem.service.CommentService;
 import com.example.forumsystem.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +24,17 @@ public class PostRestController {
     private final PostService postService;
     private final PostMapper postMapper;
     private final AuthenticationHelper authenticationHelper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
     @Autowired
-    public PostRestController(PostService postService, PostMapper postMapper, AuthenticationHelper authenticationHelper) {
+    public PostRestController(PostService postService, PostMapper postMapper, AuthenticationHelper authenticationHelper,
+                              CommentService commentService, CommentMapper commentMapper) {
         this.postService = postService;
         this.postMapper = postMapper;
         this.authenticationHelper = authenticationHelper;
+        this.commentService = commentService;
+        this.commentMapper = commentMapper;
     }
 
     @GetMapping
@@ -43,19 +46,38 @@ public class PostRestController {
     public Post getPostById(@PathVariable int id) {
         try {
             return postService.getById(id);
-        } catch (EntityNotFoundException ex) {
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, ex.getMessage());
+                    HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/mostCommentedPosts")
+    public List<Post> getMostCommentedPosts() {
+        return postService.getMostCommentedPosts();
+    }
+
+    @GetMapping("/mostRecentPosts")
+    public List<Post> getMostRecentPosts() {
+        return postService.getMostRecentPosts();
+    }
+
+    @GetMapping("/{title}")
+    public Post getPostByTitle(@PathVariable String title) {
+        try {
+            return postService.getByTitle(title);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
     @PostMapping
-    public Post createPost(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDTO postDto) {
+    public PostDtoOut createPost(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Post post = postMapper.fromDto(postDto);
+            Post post = postMapper.fromDtoForCreation(postDto);
             postService.createPost(post, user);
-            return postDtoOut;
+            return postMapper.toDtoOut(post);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -64,16 +86,18 @@ public class PostRestController {
     }
 
     @PutMapping("/{id}")
-    public Post updatePost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDTO postDto) {
+    public PostDtoOut updatePost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);`
-            Post post = postMapper.fromDto(id, postDto);
+            User user = authenticationHelper.tryGetUser(headers);
+            Post post = postMapper.fromDtoForUpdate(id, postDto);
             postService.updatePost(post, user);
-            return postDtoOut;
+            return postMapper.toDtoOut(post);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

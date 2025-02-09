@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-public class PostDTO {
+public class PostDto {
 
     @NotNull(message = "Title name can't be empty")
     @Size(min = 16, max = 64, message = "Title should be between 16 and 64 symbols")
@@ -14,10 +14,8 @@ public class PostDTO {
     @Size(min = 32, max = 8192, message = "Content should be between 2 and 20 symbols")
     private String content;
 
-    @Positive(message = "Likes must be positive")
-    private int likes;
 
-    public PostDTO() {
+    public PostDto() {
     }
 
     public String getTitle() {
@@ -34,13 +32,5 @@ public class PostDTO {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
     }
 }

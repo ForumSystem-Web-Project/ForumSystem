@@ -2,6 +2,7 @@ package com.example.forumsystem.service;
 
 import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
+import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.User;
@@ -124,7 +125,7 @@ public class UserServiceImpl implements UserService {
         PermissionHelpers.checkIfAdmin(admin);
         User user = userRepository.getById(id);
         if (user.isAdmin()){
-            throw new UnauthorizedOperationException("User is already admin!");
+            throw new InvalidOperationException("User is already admin!");
         }
         user.setAdmin(true);
         userRepository.updateUser(user);
@@ -137,7 +138,7 @@ public class UserServiceImpl implements UserService {
         PermissionHelpers.checkIfAdmin(admin);
         User user = userRepository.getById(id);
         if (!user.isAdmin()){
-            throw new UnauthorizedOperationException("User is already an ordinary user!");
+            throw new InvalidOperationException("User is already an ordinary user!");
         }
         user.setAdmin(false);
         userRepository.updateUser(user);
@@ -150,7 +151,7 @@ public class UserServiceImpl implements UserService {
         PermissionHelpers.checkIfAdmin(admin);
         User user = userRepository.getById(id);
         if (user.isBlocked()){
-            throw new UnauthorizedOperationException("User is already blocked!");
+            throw new InvalidOperationException("User is already blocked!");
         }
         user.setBlocked(true);
         userRepository.updateUser(user);
@@ -163,7 +164,7 @@ public class UserServiceImpl implements UserService {
         PermissionHelpers.checkIfAdmin(admin);
         User user = userRepository.getById(id);
         if (!user.isBlocked()){
-            throw new UnauthorizedOperationException("User is already not blocked!");
+            throw new InvalidOperationException("User is already not blocked!");
         }
         user.setBlocked(false);
         userRepository.updateUser(user);

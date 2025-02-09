@@ -12,6 +12,10 @@ public interface PostRepository {
 
     Post getByTitle(String title);
 
+    List<Post> getMostCommentedPosts();
+
+    List<Post> getMostRecentPosts();
+
     void createPost(Post post);
 
     void updatePost(Post post);

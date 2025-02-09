@@ -42,6 +42,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getMostCommentedPosts() {
+        return postRepository.getMostCommentedPosts();
+    }
+
+    @Override
+    public List<Post> getMostRecentPosts() {
+        return postRepository.getMostRecentPosts();
+    }
+
+    @Override
     public void createPost(Post post, User user) {
 
         PermissionHelpers.checkIfBlocked(user);
@@ -54,7 +64,10 @@ public class PostServiceImpl implements PostService {
 
         PermissionHelpers.checkIfBlocked(user);
         PermissionHelpers.checkIfCreatorOrAdminForPosts(user, post);
-        postRepository.getById(post.getId());
+        Post existingPost = postRepository.getById(post.getId());
+        if (post.getTitle().equals(existingPost.getTitle()) && post.getContent().equals(existingPost.getContent())) {
+            throw new UnauthorizedOperationException("No changes were made!");
+        }
         postRepository.updatePost(post);
     }
 

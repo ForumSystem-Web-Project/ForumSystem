@@ -2,6 +2,7 @@ package com.example.forumsystem.service;
 
 import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
+import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.Comment;
@@ -103,7 +104,7 @@ public class PostServiceImpl implements PostService {
         Comment oldComment = commentRepository.getById(comment.getCommentId());
 
         if (oldComment.getContent().equals(comment.getContent())) {
-            throw new UnauthorizedOperationException("Comment content is the same!");
+            throw new InvalidOperationException("Comment content is the same!");
         }
         commentRepository.update(comment);
         postRepository.updatePost(post);
@@ -129,7 +130,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.getById(postId);
 
         if (post.getLikes().contains(user)){
-            throw new UnauthorizedOperationException("User has already liked this post!");
+            throw new InvalidOperationException("User has already liked this post!");
         }
         post.getLikes().add(user);
         postRepository.updatePost(post);
@@ -142,7 +143,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.getById(postId);
 
         if (!post.getLikes().contains(user)){
-            throw new UnauthorizedOperationException("User hasn't liked this post!");
+            throw new InvalidOperationException("User hasn't liked this post!");
         }
         post.getLikes().remove(user);
         postRepository.updatePost(post);

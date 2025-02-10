@@ -108,18 +108,21 @@ public class UserRestController {
     }
     //Done
     @PutMapping("/{id}")
-    public UserDtoOut updateUser(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody UserUpdateDto userUpdateDto) {
+    public UserDtoOut updateUser(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UserUpdateDto userUpdateDto) {
         try {
             User modifier = authorizationHelper.tryGetUser(headers);
             User user = userMapper.createUpdatedUserFromDto(userUpdateDto, id);
             userService.updateUser(user, modifier);
             return userMapper.createDtoOutToObjectForUpdate(userUpdateDto, id);
+
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -204,7 +207,7 @@ public class UserRestController {
     }
 
     @PostMapping("/phoneNumber")
-    public PhoneNumber createPhone(@RequestHeader HttpHeaders headers, @RequestBody PhoneNumberDto phoneNumberDto) {
+    public PhoneNumber createPhone(@RequestHeader HttpHeaders headers, @Valid @RequestBody PhoneNumberDto phoneNumberDto) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
             PhoneNumber phoneNumber = phoneNumberMapper.map(phoneNumberDto);
@@ -220,7 +223,7 @@ public class UserRestController {
     }
 
     @PutMapping("/phoneNumber")
-    public PhoneNumber updatePhone(@RequestHeader HttpHeaders headers, @RequestBody PhoneNumberDto phoneNumberDto) {
+    public PhoneNumber updatePhone(@RequestHeader HttpHeaders headers, @Valid @RequestBody PhoneNumberDto phoneNumberDto) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
             PhoneNumber phoneNumber = phoneNumberMapper.map(phoneNumberDto);

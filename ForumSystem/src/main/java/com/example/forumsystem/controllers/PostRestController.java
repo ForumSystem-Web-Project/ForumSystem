@@ -4,6 +4,7 @@ import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
+import com.example.forumsystem.helpers.CommentMapper;
 import com.example.forumsystem.helpers.PostMapper;
 import com.example.forumsystem.models.*;
 import com.example.forumsystem.service.CommentService;
@@ -37,15 +38,17 @@ public class PostRestController {
         this.commentMapper = commentMapper;
     }
 
+    //Filtering and Sorting
     @GetMapping
     public List<Post> getAllPosts() {
         return postService.getAll();
     }
 
     @GetMapping("/{id}")
-    public Post getPostById(@PathVariable int id) {
+    public PostWithLikesAndCommentsDtoOut getPostById(@PathVariable int id) {
         try {
-            return postService.getById(id);
+            Post post = postService.getById(id);
+            return postMapper.toDtoOutWithLikesAndComments(post);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, e.getMessage());
@@ -53,19 +56,22 @@ public class PostRestController {
     }
 
     @GetMapping("/mostCommentedPosts")
-    public List<Post> getMostCommentedPosts() {
-        return postService.getMostCommentedPosts();
+    public List<PostWithLikesAndCommentsDtoOut> getMostCommentedPosts() {
+        List<Post> posts = postService.getMostCommentedPosts();
+        return postMapper.convertToDtoList(posts);
     }
 
     @GetMapping("/mostRecentPosts")
-    public List<Post> getMostRecentPosts() {
-        return postService.getMostRecentPosts();
+    public List<PostWithLikesAndCommentsDtoOut> getMostRecentPosts() {
+        List<Post> posts = postService.getMostRecentPosts();
+        return postMapper.convertToDtoList(posts);
     }
 
     @GetMapping("/{title}")
-    public Post getPostByTitle(@PathVariable String title) {
+    public PostWithLikesAndCommentsDtoOut getPostByTitle(@PathVariable String title) {
         try {
-            return postService.getByTitle(title);
+            Post post = postService.getByTitle(title);
+            return postMapper.toDtoOutWithLikesAndComments(post);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -86,12 +92,12 @@ public class PostRestController {
     }
 
     @PutMapping("/{id}")
-    public PostDtoOut updatePost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto) {
+    public PostWithLikesAndCommentsDtoOut updatePost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Post post = postMapper.fromDtoForUpdate(id, postDto);
             postService.updatePost(post, user);
-            return postMapper.toDtoOut(post);
+            return postMapper.toDtoOutWithLikesAndComments(post);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -113,13 +119,23 @@ public class PostRestController {
         }
     }
 
-    @PostMapping("{postId}/comments")
-    public Post addComment(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody ) {
+    @GetMapping("/comments/{commentId}")
+    public CommentDtoOut getCommentById(@PathVariable int commentId) {
+        try {
+            Comment comment = commentService.getById(commentId);
+            return commentMapper.fromObjToDtoOut(comment);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PostMapping("/comments/{postId}")
+    public CommentDtoOut addComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody CommentDto commentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getById(id);
-            postService.addComment(id, comment);
-            return postDtoOut;
+            Comment comment = commentMapper.fromDtoForCreation(commentDto);
+            postService.addComment(postId, user, comment);
+            return commentMapper.fromObjToDtoOut(comment);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -127,14 +143,27 @@ public class PostRestController {
         }
     }
 
-
-    @PostMapping("{postId}/comments")
-    public Post removeComment(@RequestHeader HttpHeaders headers, @PathVariable int id, @RequestBody Comment comment) {
+    @PutMapping("/comments/{postId}")
+    public CommentDtoOut updateComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody CommentDto commentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getById(id);
-            postService.removeComment(id, comment);
-            return postDtoOut;
+            Comment comment = commentMapper.fromDtoForCreation(commentDto);
+            postService.updateComment(postId, user, comment);
+            return commentMapper.fromObjToDtoOut(comment);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @DeleteMapping ("/comments/{postId}/{commentId}")
+    public void deleteComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @PathVariable int commentId) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            postService.deleteComment(postId, user, commentService.getById(commentId));
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -142,31 +171,35 @@ public class PostRestController {
         }
     }
 
-    @PutMapping("{postId}/likes")
-    public Post likePost (@RequestHeader HttpHeaders headers, @PathVariable int id){
+    @PutMapping("/likePost/{postId}")
+    public PostWithLikesAndCommentsDtoOut likePost (@RequestHeader HttpHeaders headers, @PathVariable int postId){
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getById(id);
-            postService.likePost(id);
-            return postDtoOut;
+            Post post = postService.getById(postId);
+            postService.likePost(postId, user);
+            return postMapper.toDtoOutWithLikesAndComments(post);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
-    @PutMapping("{postId}/likes")
-    public Post unlikePost (@RequestHeader HttpHeaders headers, @PathVariable int id){
+    @PutMapping("/unlikePost/{postId}")
+    public PostWithLikesAndCommentsDtoOut unlikePost (@RequestHeader HttpHeaders headers, @PathVariable int postId){
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Post post = postService.getById(id);
-            postService.unlikePost(id);
-            return postDtoOut;
+            Post post = postService.getById(postId);
+            postService.unlikePost(postId, user);
+            return postMapper.toDtoOutWithLikesAndComments(post);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

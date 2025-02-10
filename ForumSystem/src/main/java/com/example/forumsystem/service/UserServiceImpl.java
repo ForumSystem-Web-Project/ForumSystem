@@ -95,16 +95,24 @@ public class UserServiceImpl implements UserService {
         boolean duplicateExists = true;
         try {
             User existingUser = userRepository.getByEmail(user.getEmail());
+            if (user.getFirstName().equals(existingUser.getFirstName()) &&
+                    user.getLastName().equals(existingUser.getLastName()) &&
+                    user.getEmail().equals(existingUser.getEmail()) &&
+            user.getPassword().equals(existingUser.getPassword())) {
+                throw new InvalidOperationException("Invalid operation! No changes were made!");
+            }
             if (existingUser.getId() == user.getId()){
                 duplicateExists = false;
             }
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
+
         }
 
         if (duplicateExists) {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
+
 
         userRepository.updateUser(user);
     }

@@ -1,5 +1,6 @@
 package com.example.forumsystem.service;
 
+import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.Comment;
 import com.example.forumsystem.models.Post;
@@ -52,6 +53,10 @@ public class CommentServiceImpl implements CommentService {
     public void updateComment (User user, Comment comment) {
         PermissionHelpers.checkIfBlocked(user);
         PermissionHelpers.checkIfCreatorOrAdmin(comment.getCreatedBy().getId(), user);
+        Comment existingComment = commentRepository.getById(comment.getCommentId());
+        if (existingComment.getContent().equals(comment.getContent())){
+            throw new InvalidOperationException("Invalid operation! Updated comment content is the same!");
+        }
         commentRepository.update(comment);
     }
 

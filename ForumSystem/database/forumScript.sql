@@ -34,7 +34,7 @@ CREATE TABLE comments (
                           comment_id INT AUTO_INCREMENT PRIMARY KEY,
                           post_id INT NOT NULL,
                           user_id INT NOT NULL,
-                          content TEXT NOT NULL CHECK (LENGTH(content) > 0 AND LENGTH(content) <= 8192),
+                          content TEXT NOT NULL CHECK (LENGTH(content) BETWEEN 1 AND 2000),
                           CONSTRAINT comments_posts_post_id_fk
                               FOREIGN KEY (post_id) REFERENCES posts (post_id)
                                   ON DELETE CASCADE,

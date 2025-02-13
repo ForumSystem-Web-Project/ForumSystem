@@ -6,6 +6,7 @@ import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.Comment;
+import com.example.forumsystem.models.FilterPostOptions;
 import com.example.forumsystem.models.Post;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.repository.CommentRepository;
@@ -28,8 +29,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAll() {
-        return postRepository.getAll();
+    public List<Post> getAll(FilterPostOptions filterPostOptions) {
+        return postRepository.getAll(filterPostOptions);
     }
 
     @Override

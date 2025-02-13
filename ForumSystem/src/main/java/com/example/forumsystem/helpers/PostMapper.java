@@ -9,6 +9,7 @@ import com.example.forumsystem.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,5 +63,18 @@ public class PostMapper {
         return posts.stream()
                 .map(post -> new PostWithLikesAndCommentsDtoOut(post.getTitle(), post.getContent(), post.getCreatedBy().getUsername(), post.getCreatedAt(), post.getLikes().size(), post.getComments()))
                 .collect(Collectors.toList());
+    }
+
+    public List<PostDtoOut> listAllPostsDtoOut(List<Post> postList){
+        List<PostDtoOut> listPostDtoOut = new ArrayList<>();
+        for (Post post : postList){
+            PostDtoOut postDtoOut = new PostDtoOut();
+            postDtoOut.setTitle(post.getTitle());
+            postDtoOut.setContent(post.getContent());
+            postDtoOut.setCreatedBy(post.getCreatedBy().getUsername());
+            listPostDtoOut.add(postDtoOut);
+        }
+
+        return listPostDtoOut;
     }
 }

@@ -1,14 +1,17 @@
 package com.example.forumsystem.service;
 
+import com.example.forumsystem.models.FilterUserOptions;
 import com.example.forumsystem.models.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<User> getAll();
+    List<User> getAll(FilterUserOptions filterUserOptions);
 
     User getById(User modifier, int id);
+
+    User getByUsernameForAdmin(User admin, String username);
 
     User getByUsername(String username);
 

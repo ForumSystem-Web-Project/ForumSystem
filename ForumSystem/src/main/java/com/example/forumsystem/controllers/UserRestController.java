@@ -38,53 +38,65 @@ public class UserRestController {
         this.phoneNumberService = phoneNumberService;
         this.phoneNumberMapper = phoneNumberMapper;
     }
+    //Working
     //Filtering and Sorting
     @GetMapping
-    public List<User> getAllUsers(){
-        return userService.getAll();
+    public List<UserDtoOut> getAll(@RequestParam(required = false) String firstName,
+                                   @RequestParam(required = false) String lastName,
+                                   @RequestParam(required = false) String username,
+                                   @RequestParam(required = false) String email,
+                                   @RequestParam(required = false) String sortBy,
+                                   @RequestParam(required = false) String orderBy) {
+        FilterUserOptions filterOptions = new FilterUserOptions(firstName, lastName,
+                username, email, sortBy, orderBy);
+        return userMapper.allUsersToDtoOut(userService.getAll(filterOptions));
     }
-    //Done
+    //Working
     @GetMapping("/{id}")
-    public User getUserById(@RequestHeader HttpHeaders headers, @PathVariable int id){
+    public UserDtoOut getUserById(@RequestHeader HttpHeaders headers, @PathVariable int id){
         try {
-            User user = authorizationHelper.tryGetUser(headers);
-            return userService.getById(user, id);
+            User admin = authorizationHelper.tryGetUser(headers);
+            User existingUser = userService.getById(admin, id);
+            return userMapper.createDtoOut(existingUser);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    //Done
+    //Working
     @GetMapping("/username/{username}")
-    public User getUserByUsername(@RequestHeader HttpHeaders headers, @PathVariable String username) {
+    public UserDtoOut getUserByUsername(@RequestHeader HttpHeaders headers, @PathVariable String username) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
-            return userService.getByUsername(username);
+            User existingUser = userService.getByUsernameForAdmin(admin, username);
+            return userMapper.createDtoOut(existingUser);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    //Done
+    //Working
     @GetMapping("/email/{email}")
-    public User getUserByEmail(@RequestHeader HttpHeaders headers, @PathVariable String email) {
+    public UserDtoOut getUserByEmail(@RequestHeader HttpHeaders headers, @PathVariable String email) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
-            return userService.getByEmail(admin, email);
+            User existingUser = userService.getByEmail(admin, email);
+            return userMapper.createDtoOut(existingUser);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    //Done
+    //Working
     @GetMapping("/firstname/{firstname}")
-    public User getUserByFirstName(@RequestHeader HttpHeaders headers, @PathVariable String firstname) {
+    public UserDtoOut getUserByFirstName(@RequestHeader HttpHeaders headers, @PathVariable String firstname) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
-            return userService.getByFirstName(admin, firstname);
+            User existingUser = userService.getByFirstName(admin, firstname);
+            return userMapper.createDtoOut(existingUser);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
@@ -100,11 +112,9 @@ public class UserRestController {
             return userMapper.createDtoOutToObjectForCreate(userCreateDto);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (DuplicateEntityException e) {
+        }  catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (UnauthorizedOperationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
+        } 
     }
     //Done
     @PutMapping("/{id}")

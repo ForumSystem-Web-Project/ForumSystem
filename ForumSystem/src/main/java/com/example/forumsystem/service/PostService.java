@@ -1,6 +1,7 @@
 package com.example.forumsystem.service;
 
 import com.example.forumsystem.models.Comment;
+import com.example.forumsystem.models.FilterPostOptions;
 import com.example.forumsystem.models.Post;
 import com.example.forumsystem.models.User;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface PostService {
 
-    List<Post> getAll();
+    List<Post> getAll(FilterPostOptions filterPostOptions);
 
     Post getById(int id);
 

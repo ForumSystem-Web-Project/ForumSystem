@@ -1,12 +1,13 @@
 package com.example.forumsystem.repository;
 
+import com.example.forumsystem.models.FilterPostOptions;
 import com.example.forumsystem.models.Post;
 
 import java.util.List;
 
 public interface PostRepository {
 
-    List<Post> getAll();
+    List<Post> getAll(FilterPostOptions filterPostOptions);
 
     Post getById(int id);
 

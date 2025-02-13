@@ -29,7 +29,7 @@ public class Post {
     private User createdBy;
 
     @CreationTimestamp
-    @Column(name = "timestamp")
+    @Column(name = "createdAt")
     private Timestamp createdAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -40,7 +40,7 @@ public class Post {
     private Set<User> likes = new HashSet<>();
 
 
-    @OneToMany(mappedBy = "postId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     private List<Comment> comments;
 
 

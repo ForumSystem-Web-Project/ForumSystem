@@ -5,6 +5,7 @@ import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
+import com.example.forumsystem.models.FilterUserOptions;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
-        return userRepository.getAll();
+    public List<User> getAll(FilterUserOptions filterUserOptions) {
+        return userRepository.getAll(filterUserOptions);
     }
 
     @Override
@@ -36,7 +37,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByUsername( String username) {
+    public User getByUsername(String username) {
+        return userRepository.getByUsername(username);
+    }
+
+    @Override
+    public User getByUsernameForAdmin(User admin, String username) {
+        PermissionHelpers.checkIfBlocked(admin);
+        PermissionHelpers.checkIfAdmin(admin);
         return userRepository.getByUsername(username);
     }
 

@@ -29,13 +29,13 @@ public class PermissionHelpers {
     }
 
     public static void checkIfCreatorOrAdminForPosts(User user, Post post) {
-        if (!(user.equals(post.getCreatedBy()) || user.isAdmin())) {
+        if (!user.equals(post.getCreatedBy()) || !user.isAdmin()) {
             throw new UnauthorizedOperationException(AUTHORIZATION_PERMISSION_ERROR);
         }
     }
 
     public static void checkIfCreatorOrAdmin(int userId, User user) {
-        if (!(userId == user.getId() || user.isAdmin())) {
+        if (userId != user.getId() || !user.isAdmin()) {
             throw new UnauthorizedOperationException(AUTHORIZATION_PERMISSION_ERROR);
         }
     }

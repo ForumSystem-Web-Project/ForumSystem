@@ -40,8 +40,16 @@ public class PostRestController {
 
     //Filtering and Sorting
     @GetMapping
-    public List<Post> getAllPosts() {
-        return postService.getAll();
+    public List<PostDtoOut> getAll(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String content,
+            @RequestParam(required = false) String createdBy,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortOrder) {
+        FilterPostOptions filterOptions = new FilterPostOptions(title, content, createdBy,
+                sortBy, sortOrder);
+
+        return postMapper.listAllPostsDtoOut(postService.getAll(filterOptions));
     }
 
     @GetMapping("/{id}")
@@ -55,6 +63,17 @@ public class PostRestController {
         }
     }
 
+    @GetMapping("/{title}")
+    public PostWithLikesAndCommentsDtoOut getPostByTitle(@PathVariable String title) {
+        try {
+            Post post = postService.getByTitle(title);
+            return postMapper.toDtoOutWithLikesAndComments(post);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+
     @GetMapping("/mostCommentedPosts")
     public List<PostWithLikesAndCommentsDtoOut> getMostCommentedPosts() {
         List<Post> posts = postService.getMostCommentedPosts();
@@ -65,16 +84,6 @@ public class PostRestController {
     public List<PostWithLikesAndCommentsDtoOut> getMostRecentPosts() {
         List<Post> posts = postService.getMostRecentPosts();
         return postMapper.convertToDtoList(posts);
-    }
-
-    @GetMapping("/{title}")
-    public PostWithLikesAndCommentsDtoOut getPostByTitle(@PathVariable String title) {
-        try {
-            Post post = postService.getByTitle(title);
-            return postMapper.toDtoOutWithLikesAndComments(post);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
     }
 
     @PostMapping

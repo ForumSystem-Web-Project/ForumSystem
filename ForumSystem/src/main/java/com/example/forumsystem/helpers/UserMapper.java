@@ -8,6 +8,9 @@ import com.example.forumsystem.models.UserUpdateDto;
 import com.example.forumsystem.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class UserMapper {
 
@@ -58,5 +61,28 @@ public class UserMapper {
         userOut.setUsername(userRepository.getById(id).getUsername());
         userOut.setEmail(userUpdateDto.getEmail());
         return userOut;
+    }
+
+    public UserDtoOut createDtoOut (User user) {
+        UserDtoOut userOut = new UserDtoOut();
+        userOut.setFirstName(user.getFirstName());
+        userOut.setLastName(user.getLastName());
+        userOut.setUsername(user.getUsername());
+        userOut.setEmail(user.getEmail());
+        return userOut;
+    }
+
+    public List<UserDtoOut> allUsersToDtoOut(List<User> userList){
+        List<UserDtoOut> userDto = new ArrayList<>();
+        for (User user : userList){
+            UserDtoOut userDtoOut = new UserDtoOut();
+            userDtoOut.setFirstName(user.getFirstName());
+            userDtoOut.setLastName(user.getLastName());
+            userDtoOut.setUsername(user.getUsername());
+            userDtoOut.setEmail(user.getEmail());
+            userDto.add(userDtoOut);
+        }
+
+        return userDto;
     }
 }

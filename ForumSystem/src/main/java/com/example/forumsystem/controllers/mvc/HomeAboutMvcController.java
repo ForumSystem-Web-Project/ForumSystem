@@ -12,7 +12,7 @@ public class HomeAboutMvcController {
 
     @GetMapping
     public String showHomePage() {
-        return "index";
+        return "home-page";
     }
 
     @GetMapping("/about")

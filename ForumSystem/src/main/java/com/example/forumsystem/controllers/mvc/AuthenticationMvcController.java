@@ -1,10 +1,16 @@
 package com.example.forumsystem.controllers.mvc;
 
 import com.example.forumsystem.exeptions.AuthenticationFailureException;
+import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
+import com.example.forumsystem.helpers.RegisterMapper;
 import com.example.forumsystem.models.LoginDto;
+import com.example.forumsystem.models.RegisterDto;
+import com.example.forumsystem.models.User;
+import com.example.forumsystem.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,16 +23,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/auth")
 public class AuthenticationMvcController {
 
+    private final UserService userService;
+    private final RegisterMapper registerMapper;
     private final AuthenticationHelper authenticationHelper;
 
-    public AuthenticationMvcController(AuthenticationHelper authenticationHelper) {
+    @Autowired
+    public AuthenticationMvcController(UserService userService, RegisterMapper registerMapper, AuthenticationHelper authenticationHelper) {
+        this.userService = userService;
+        this.registerMapper = registerMapper;
         this.authenticationHelper = authenticationHelper;
     }
 
     @GetMapping("/login")
     public String showLoginPage(Model model) {
         model.addAttribute("login", new LoginDto());
-        return "login";
+        return "login-page";
     }
 
     @PostMapping("/login")
@@ -35,7 +46,7 @@ public class AuthenticationMvcController {
             , HttpSession session) {
 
         if (bindingResult.hasErrors()) {
-            return "login";
+            return "login-page";
         }
 
         try {
@@ -47,7 +58,43 @@ public class AuthenticationMvcController {
         } catch (AuthenticationFailureException e) {
             bindingResult.rejectValue("username", "error.login", e.getMessage());
 
-            return "login";
+            return "login-page";
+        }
+    }
+
+    @GetMapping("/logout")
+    public String handleLogout(HttpSession session){
+        session.removeAttribute("currentUser");
+        return "redirect:/";
+    }
+
+    @GetMapping("/register")
+    public String showRegisterPage(Model model) {
+        model.addAttribute("register", new RegisterDto());
+        return "register-page";
+    }
+
+    @PostMapping("/register")
+    public String handleRegister(@Valid @ModelAttribute("register") RegisterDto registerDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "register-page";
+        }
+
+        if (!registerDto.getPassword().equals(registerDto.getPasswordConfirm())){
+            bindingResult.rejectValue("passwordConfirm",
+                    "error.register.password",
+                    "Password conformation must match password");
+            return "register-page";
+        }
+
+        try {
+            User user = registerMapper.fromDto(registerDto);
+            userService.createUser(user);
+            return "redirect:/auth/login";
+        } catch (DuplicateEntityException e){
+            bindingResult.rejectValue("username", "username.error", e.getMessage());
+            return "register-page";
         }
     }
 }

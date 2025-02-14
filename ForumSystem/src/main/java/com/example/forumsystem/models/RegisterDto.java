@@ -1,6 +1,7 @@
 package com.example.forumsystem.models;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 public class RegisterDto extends LoginDto{
 
@@ -8,9 +9,11 @@ public class RegisterDto extends LoginDto{
     private String passwordConfirm;
 
     @NotEmpty
+    @Size(min = 4, max = 32, message = "First name must be between 4 and 32 symbols!")
     private String firstName;
 
     @NotEmpty
+    @Size(min = 4, max = 32, message = "Last name must be between 4 and 32 symbols!")
     private String lastName;
 
     @NotEmpty

@@ -1,13 +1,16 @@
 package com.example.forumsystem.models;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 public class LoginDto {
 
     @NotEmpty
+    @Size(min = 4, max = 32, message = "Username must be between 2 and 20 symbols!")
     private String username;
 
     @NotEmpty
+    @Size(min = 8, message = "Password must be above 8 symbols!")
     private String password;
 
     public LoginDto() {

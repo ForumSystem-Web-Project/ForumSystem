@@ -1,5 +1,6 @@
 package com.example.forumsystem.helpers;
 
+import com.example.forumsystem.exeptions.AuthenticationFailureException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.User;
@@ -13,6 +14,7 @@ public class AuthenticationHelper {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String INVALID_AUTHENTICATION_ERROR = "Invalid authentication.";
+    public static final String AUTHENTICATION_FAILURE = "Wrong username or password! Please try again.";
 
     private final UserService userService;
 
@@ -39,6 +41,21 @@ public class AuthenticationHelper {
             return user;
         } catch (EntityNotFoundException e) {
             throw new UnauthorizedOperationException(INVALID_AUTHENTICATION_ERROR);
+        }
+    }
+
+    public User verifyAuthentication(String username, String password) {
+        try {
+            User user = userService.getByUsername(username);
+
+            if (!user.getPassword().equals(password)) {
+                throw new AuthenticationFailureException(AUTHENTICATION_FAILURE);
+            }
+
+            return user;
+
+        } catch (EntityNotFoundException e) {
+            throw new AuthenticationFailureException(AUTHENTICATION_FAILURE);
         }
     }
 

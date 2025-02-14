@@ -70,6 +70,8 @@ ul li {
 
 p {
     line-height: 1.8;
+    margin-left: 30px;
+
 }
 
 footer {
@@ -81,4 +83,60 @@ footer {
     bottom: 0;
     width: 100%;
     font-size: 14px;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.hero {
+    background: #0056b3;
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+.hero p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #ffdd57;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background: #ffcc00;
+}
+
+.features {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.feature-boxes {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.feature {
+    background: white;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 30%;
 }

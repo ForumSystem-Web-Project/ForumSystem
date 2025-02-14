@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Forum System | Home</title>
-    <link rel="icon" href="../static/favicon.PNG" th:href="@{/favicon.PNG}">
+    <link rel="icon" href="../static/favicon.png" th:href="@{/favicon.png}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 </head>
 
@@ -12,7 +12,7 @@
 
 <header>
     <div>
-        <img src="../static/logo.PNG" th:src="@{/logo.png}" alt="Forum System logo"/>
+        <img src="../static/logo.png" th:src="@{/logo.png}" alt="Forum System logo"/>
         <nav>
 
             <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
@@ -24,7 +24,33 @@
     </div>
 </header>
 
+<section class="hero">
+    <div class="container">
+        <h1 style="color: black">Welcome to our Forum</h1>
+        <p style="color: black">Join the conversation, share your knowledge, and engage with a vibrant community.</p>
+        <a href="#" th:href="@{/auth/register}" class="btn">Get Started</a>
+    </div>
+</section>
 
+<section class="features">
+    <div class="container">
+        <h2>Why Join Us?</h2>
+        <div class="feature-boxes">
+            <div class="feature">
+                <h3>Engaging Discussions</h3>
+                <p>Explore and participate in a wide range of topics with insightful conversations.</p>
+            </div>
+            <div class="feature">
+                <h3>Easy to Use</h3>
+                <p>Our user-friendly interface ensures a seamless browsing and interaction experience.</p>
+            </div>
+            <div class="feature">
+                <h3>Community Driven</h3>
+                <p>Our members contribute and upvote the best content to keep discussions relevant.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
 <footer>
     <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>

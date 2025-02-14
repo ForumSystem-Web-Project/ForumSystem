@@ -269,3 +269,46 @@ h2 {
     text-decoration: underline;
 }
 
+.container-not-found {
+    width: 100%;
+    max-width: 600px;
+    margin: 100px auto;
+    background: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.img-not-found {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.h1-not-found {
+    font-size: 2rem;
+    margin: 20px 0;
+    color: #d9534f;
+}
+
+.p-not-found {
+    font-size: 1.2rem;
+}
+
+.home-btn-not-found {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.home-btn-not-found:hover {
+    background: #0056b3;
+}

@@ -3,13 +3,11 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Forum System | Home</title>
+    <title>Page Not Found</title>
     <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 
 </head>
-
-
 <body>
 
 <header>
@@ -31,33 +29,12 @@
     </div>
 </header>
 
-<section class="hero">
-    <div class="container">
-        <h1 style="color: black">Welcome to our Forum</h1>
-        <p style="color: black">Join the conversation, share your knowledge, and engage with a vibrant community.</p>
-        <a href="#" th:href="@{/auth/register}" class="btn">Get Started</a>
-    </div>
-</section>
-
-<section class="features">
-    <div class="container">
-        <h2>Why Join Us?</h2>
-        <div class="feature-boxes">
-            <div class="feature">
-                <h3>Engaging Discussions</h3>
-                <p>Explore and participate in a wide range of topics with insightful conversations.</p>
-            </div>
-            <div class="feature">
-                <h3>Easy to Use</h3>
-                <p>Our user-friendly interface ensures a seamless browsing and interaction experience.</p>
-            </div>
-            <div class="feature">
-                <h3>Community Driven</h3>
-                <p>Our members contribute and upvote the best content to keep discussions relevant.</p>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="container-not-found">
+    <img src="../static/page-not-found.jpg" th:src="@{/page-not-found.jpg}" class="img-not-found" alt="404 Image">
+    <h1 class="h1-not-found">Oops! Page Not Found</h1>
+    <p class="p-not-found">The page you're looking for doesn't exist or has been moved.</p>
+    <a href="/" th:href="@{/}" class="home-btn-not-found">Go Back Home</a>
+</div>
 
 <footer>
     <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>

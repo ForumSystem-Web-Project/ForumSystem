@@ -21,7 +21,7 @@
             <a href="#" th:href="@{/users}" th:text="#{navigation.users}">Users</a>
             <span>|</span>
             <a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a>
-            <span th:unless="${isAuthenticated}">|</span>
+            <span>|</span>
             <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{navigation.login}">Login</a>
             <span th:unless="${isAuthenticated}">|</span>
             <a th:if="${isAuthenticated}" href="#" th:href="@{/auth/logout}" th:text="#{navigation.logout}">Logout</a>

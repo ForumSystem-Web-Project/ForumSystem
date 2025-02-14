@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Forum System | About</title>
+    <link rel="icon" href="../static/favicon.PNG" th:href="@{/favicon.PNG}">
+    <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
+</head>
+
+
+<body>
+
+<header>
+    <div>
+        <img src="../static/logo.PNG" th:src="@{/logo.png}" alt="Forum System logo"/>
+        <nav>
+
+            <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+            <span>|</span>
+            <a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a>
+            <span>|</span>
+
+        </nav>
+    </div>
+</header>
+
+<div>
+
+    <h2>Our Mission</h2>
+    <p>Our goal is to provide a structured and user-friendly forum where users can create posts, add comments, and upvote/down-vote content based on relevance and engagement. We believe in the power of community-driven discussions and aim to facilitate a platform that encourages learning, collaboration, and constructive debates.</p>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li><strong>User-Friendly Interface:</strong> Our platform is designed with a simple and intuitive interface that makes navigation seamless for both new and experienced users.</li>
+        <li><strong>Post & Comment System:</strong> Users can create posts on the forum’s core topic and engage in discussions through comments.</li>
+        <li><strong>Voting Mechanism:</strong> Users can upvote or down-vote posts and comments to highlight the most relevant content.</li>
+        <li><strong>User Authentication & Profiles:</strong> Secure registration and login system with user profiles that include names, email addresses, usernames, and profile pictures.</li>
+        <li><strong>Sorting & Filtering:</strong> Easily browse and organize posts by popularity, date, or level of engagement.</li>
+        <li><strong>Administrative Controls:</strong> Forum administrators have the ability to manage content, block users, and maintain a respectful and safe environment.</li>
+    </ul>
+
+    <h2>User Access & Roles</h2>
+    <ul>
+        <li><strong>Public Access:</strong> Anonymous users can view core platform features, recent posts, and top discussions. Registration is required to participate.</li>
+        <li><strong>Registered Users:</strong> Gain full access to create, comment, upvote/down-vote, and interact with posts.</li>
+        <li><strong>Admins:</strong> Have additional privileges, including user moderation, post management, and forum oversight.</li>
+    </ul>
+
+    <h2>Join the Conversation</h2>
+    <p>Our forum is built to bring people together around shared interests. Whether you're here to ask questions, share expertise, or simply engage with the community, we invite you to become a part of our growing platform.</p>
+    <p>Start exploring today and let your voice be heard!</p>
+
+</div>
+
+<footer>
+    <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>
+</footer>
+
+</body>
+</html>

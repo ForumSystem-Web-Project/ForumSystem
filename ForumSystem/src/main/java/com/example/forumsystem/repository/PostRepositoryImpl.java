@@ -152,10 +152,9 @@ public class PostRepositoryImpl implements PostRepository {
         }
 
         String orderBy = switch (filterOptions.getSortBy().get()) {
-            case "title" -> "title";
             case "content" -> "content";
             case "createdBy" -> "createdBy.username";
-            default -> "";
+            default -> "title";
         };
 
         orderBy = String.format(" order by %s", orderBy);

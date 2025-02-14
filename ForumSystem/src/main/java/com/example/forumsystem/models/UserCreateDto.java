@@ -17,6 +17,7 @@ public class UserCreateDto {
 
     @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}",
             flags = Pattern.Flag.CASE_INSENSITIVE)
+    @NotNull
     private String email;
 
     @NotNull(message = "Username cannot be empty!")

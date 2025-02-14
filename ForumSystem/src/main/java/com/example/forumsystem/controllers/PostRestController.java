@@ -52,18 +52,17 @@ public class PostRestController {
         return postMapper.listAllPostsDtoOut(postService.getAll(filterOptions));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/postId/{id}")
     public PostWithLikesAndCommentsDtoOut getPostById(@PathVariable int id) {
         try {
             Post post = postService.getById(id);
             return postMapper.toDtoOutWithLikesAndComments(post);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    @GetMapping("/{title}")
+    @GetMapping("/title/{title}")
     public PostWithLikesAndCommentsDtoOut getPostByTitle(@PathVariable String title) {
         try {
             Post post = postService.getByTitle(title);
@@ -152,11 +151,11 @@ public class PostRestController {
         }
     }
 
-    @PutMapping("/comments/{postId}")
-    public CommentDtoOut updateComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody CommentDto commentDto) {
+    @PutMapping("/comments/{postId}/{commentId}")
+    public CommentDtoOut updateComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @PathVariable int commentId, @Valid @RequestBody CommentDto commentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Comment comment = commentMapper.fromDtoForCreation(commentDto);
+            Comment comment = commentMapper.fromDtoForUpdate(commentDto, commentId);
             postService.updateComment(postId, user, comment);
             return commentMapper.fromObjToDtoOut(comment);
         } catch (EntityNotFoundException e) {
@@ -168,11 +167,11 @@ public class PostRestController {
         }
     }
 
-    @DeleteMapping ("/comments/{postId}/{commentId}")
-    public void deleteComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @PathVariable int commentId) {
+    @DeleteMapping ("/comments/{commentId}")
+    public void deleteComment(@RequestHeader HttpHeaders headers, @PathVariable int commentId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            postService.deleteComment(postId, user, commentService.getById(commentId));
+            postService.deleteComment(user, commentService.getById(commentId));
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {

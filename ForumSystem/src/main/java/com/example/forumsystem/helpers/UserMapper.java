@@ -51,6 +51,7 @@ public class UserMapper {
         existingUser.setFirstName(userUpdateDto.getFirstName());
         existingUser.setLastName(userUpdateDto.getLastName());
         existingUser.setPassword(userUpdateDto.getPassword());
+        existingUser.setEmail(userUpdateDto.getEmail());
         return existingUser;
     }
     //updating

@@ -66,6 +66,6 @@ public class CommentServiceImpl implements CommentService {
 
         PermissionHelpers.checkIfBlocked(user);
         PermissionHelpers.checkIfCreatorOrAdmin(comment.getCreatedBy().getId(), user);
-        commentRepository.delete(comment);
+        commentRepository.delete(comment.getCommentId());
     }
 }

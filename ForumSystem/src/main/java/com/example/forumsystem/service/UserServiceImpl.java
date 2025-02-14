@@ -98,20 +98,23 @@ public class UserServiceImpl implements UserService {
     public void updateUser(User user, User modifier) {
 
         PermissionHelpers.checkIfBlocked(modifier);
-        PermissionHelpers.checkIfCreatorOrAdmin(modifier.getId(), modifier);
-        // Needs an updateUserDTO to avoid updating the username
+        PermissionHelpers.checkIfCreatorOrAdmin(user.getId(), modifier);
+
         boolean duplicateExists = true;
         try {
             User existingUser = userRepository.getByEmail(user.getEmail());
             if (user.getFirstName().equals(existingUser.getFirstName()) &&
-                    user.getLastName().equals(existingUser.getLastName()) &&
-                    user.getEmail().equals(existingUser.getEmail()) &&
+            user.getLastName().equals(existingUser.getLastName()) &&
+            user.getEmail().equals(existingUser.getEmail()) &&
             user.getPassword().equals(existingUser.getPassword())) {
-                throw new InvalidOperationException("Invalid operation! No changes were made!");
+
+                throw new InvalidOperationException("Invalid operation! Nothing was changed!");
             }
+
             if (existingUser.getId() == user.getId()){
                 duplicateExists = false;
             }
+
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
 
@@ -120,8 +123,6 @@ public class UserServiceImpl implements UserService {
         if (duplicateExists) {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
-
-
         userRepository.updateUser(user);
     }
 
@@ -130,7 +131,6 @@ public class UserServiceImpl implements UserService {
 
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
-        User user = userRepository.getById(id);
         userRepository.deleteUser(id);
     }
 

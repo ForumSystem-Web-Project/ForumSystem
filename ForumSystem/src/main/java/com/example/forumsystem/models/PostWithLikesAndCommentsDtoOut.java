@@ -15,12 +15,12 @@ public class PostWithLikesAndCommentsDtoOut {
 
     private int likes;
 
-    private List<Comment> comments;
+    private List<CommentDtoOut> comments;
 
     public PostWithLikesAndCommentsDtoOut() {
     }
 
-    public PostWithLikesAndCommentsDtoOut(String title, String content, String createdBy, Timestamp createdAt, int likes, List<Comment> comments) {
+    public PostWithLikesAndCommentsDtoOut(String title, String content, String createdBy, Timestamp createdAt, int likes, List<CommentDtoOut> comments) {
         this.title = title;
         this.content = content;
         this.createdBy = createdBy;
@@ -69,11 +69,11 @@ public class PostWithLikesAndCommentsDtoOut {
         this.likes = likes;
     }
 
-    public List<Comment> getComments() {
+    public List<CommentDtoOut> getComments() {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(List<CommentDtoOut> comments) {
         this.comments = comments;
     }
 }

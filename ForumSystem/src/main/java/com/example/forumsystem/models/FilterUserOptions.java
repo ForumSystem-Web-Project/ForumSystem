@@ -16,9 +16,10 @@ public class FilterUserOptions {
         this.firstName = Optional.ofNullable(firstName);
         this.lastName = Optional.ofNullable(lastName);
         this.username = Optional.ofNullable(username);
+        this.email = Optional.ofNullable(email);
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
-        this.email = Optional.ofNullable(email);
+
     }
 
     public Optional<String> getFirstName() {

@@ -37,4 +37,10 @@ public class CommentMapper {
         commentDtoOut.setCreatedBy(comment.getCreatedBy().getUsername());
         return commentDtoOut;
     }
+
+    public Comment fromDtoForUpdate(CommentDto commentDto, int commentID) {
+        Comment commentDtoOut = commentService.getById(commentID);
+        commentDtoOut.setContent(commentDto.getContent());
+        return commentDtoOut;
+    }
 }

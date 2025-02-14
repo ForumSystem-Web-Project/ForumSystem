@@ -38,8 +38,7 @@ public class UserRestController {
         this.phoneNumberService = phoneNumberService;
         this.phoneNumberMapper = phoneNumberMapper;
     }
-    //Working
-    //Filtering and Sorting
+
     @GetMapping
     public List<UserDtoOut> getAll(@RequestParam(required = false) String firstName,
                                    @RequestParam(required = false) String lastName,
@@ -51,7 +50,7 @@ public class UserRestController {
                 username, email, sortBy, orderBy);
         return userMapper.allUsersToDtoOut(userService.getAll(filterOptions));
     }
-    //Working
+
     @GetMapping("/{id}")
     public UserDtoOut getUserById(@RequestHeader HttpHeaders headers, @PathVariable int id){
         try {
@@ -64,7 +63,7 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    //Working
+
     @GetMapping("/username/{username}")
     public UserDtoOut getUserByUsername(@RequestHeader HttpHeaders headers, @PathVariable String username) {
         try {
@@ -77,7 +76,7 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    //Working
+
     @GetMapping("/email/{email}")
     public UserDtoOut getUserByEmail(@RequestHeader HttpHeaders headers, @PathVariable String email) {
         try {
@@ -90,7 +89,7 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    //Working
+
     @GetMapping("/firstname/{firstname}")
     public UserDtoOut getUserByFirstName(@RequestHeader HttpHeaders headers, @PathVariable String firstname) {
         try {
@@ -103,20 +102,18 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    //Done
+
     @PostMapping
     public UserDtoOut createUser(@Valid @RequestBody UserCreateDto userCreateDto) {
         try {
             User newUser = userMapper.createUserFromDto(userCreateDto);
             userService.createUser(newUser);
             return userMapper.createDtoOutToObjectForCreate(userCreateDto);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }  catch (DuplicateEntityException e) {
+        } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } 
     }
-    //Done
+
     @PutMapping("/{id}")
     public UserDtoOut updateUser(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UserUpdateDto userUpdateDto) {
         try {
@@ -227,6 +224,8 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (InvalidOperationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
@@ -236,7 +235,7 @@ public class UserRestController {
     public PhoneNumber updatePhone(@RequestHeader HttpHeaders headers, @Valid @RequestBody PhoneNumberDto phoneNumberDto) {
         try {
             User admin = authorizationHelper.tryGetUser(headers);
-            PhoneNumber phoneNumber = phoneNumberMapper.map(phoneNumberDto);
+            PhoneNumber phoneNumber = phoneNumberMapper.updateMap(phoneNumberDto, admin);
             phoneNumberService.updatePhoneNumber(admin, phoneNumber);
             return phoneNumber;
         } catch (EntityNotFoundException e) {
@@ -245,6 +244,8 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (InvalidOperationException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 

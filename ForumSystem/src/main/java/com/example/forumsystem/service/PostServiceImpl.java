@@ -68,7 +68,7 @@ public class PostServiceImpl implements PostService {
         PermissionHelpers.checkIfCreatorOrAdminForPosts(user, post);
         Post existingPost = postRepository.getById(post.getId());
         if (post.getTitle().equals(existingPost.getTitle()) && post.getContent().equals(existingPost.getContent())) {
-            throw new UnauthorizedOperationException("No changes were made!");
+            throw new InvalidOperationException("No changes were made!");
         }
         postRepository.updatePost(post);
     }
@@ -112,16 +112,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deleteComment (int postId, User user, Comment comment) {
+    public void deleteComment (User user, Comment comment) {
 
         PermissionHelpers.checkIfBlocked(user);
         PermissionHelpers.checkIfCreatorOrAdmin(comment.getCreatedBy().getId(), user);
 
-        Post post = postRepository.getById(postId);
-        commentRepository.getById(comment.getCommentId());
-        post.getComments().remove(comment);
-        commentRepository.delete(comment);
-        postRepository.updatePost(post);
+        commentRepository.delete(comment.getCommentId());
     }
 
     @Override

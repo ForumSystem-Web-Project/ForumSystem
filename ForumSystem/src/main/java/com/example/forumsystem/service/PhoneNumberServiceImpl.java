@@ -4,6 +4,7 @@ import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.exeptions.InvalidOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
+import com.example.forumsystem.helpers.PhoneNumberMapper;
 import com.example.forumsystem.models.PhoneNumber;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.repository.PhoneNumberRepository;
@@ -75,9 +76,15 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
     public void updatePhoneNumber(User admin, PhoneNumber phoneNumber){
         PermissionHelpers.checkIfBlocked(admin);
         PermissionHelpers.checkIfAdmin(admin);
+
+        PhoneNumber existingPhone = phoneNumberRepository.getByUserId(admin);
+        if (phoneNumber.getPhoneNumber().equals(existingPhone.getPhoneNumber())) {
+            throw new InvalidOperationException("Invalid operation! User's number is unchanged!");
+        }
+
         boolean exists = true;
         try {
-            phoneNumberRepository.getByUserId(admin);
+            phoneNumberRepository.getByPhoneNumber(phoneNumber);
         } catch (EntityNotFoundException e){
             exists = false;
         }

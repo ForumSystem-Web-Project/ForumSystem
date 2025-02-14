@@ -34,8 +34,8 @@ public class Post {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "likes",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+                    joinColumns = @JoinColumn(name = "post_id"),
+                    inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private Set<User> likes = new HashSet<>();
 

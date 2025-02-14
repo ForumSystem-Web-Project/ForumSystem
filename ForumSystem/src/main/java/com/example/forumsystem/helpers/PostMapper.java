@@ -1,9 +1,6 @@
 package com.example.forumsystem.helpers;
 
-import com.example.forumsystem.models.Post;
-import com.example.forumsystem.models.PostDto;
-import com.example.forumsystem.models.PostDtoOut;
-import com.example.forumsystem.models.PostWithLikesAndCommentsDtoOut;
+import com.example.forumsystem.models.*;
 import com.example.forumsystem.service.CommentService;
 import com.example.forumsystem.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,13 +52,19 @@ public class PostMapper {
         postWithLikesAndCommentsDtoOut.setCreatedBy(post.getCreatedBy().getUsername());
         postWithLikesAndCommentsDtoOut.setCreatedAt(post.getCreatedAt());
         postWithLikesAndCommentsDtoOut.setLikes(post.getLikes().size());
-        postWithLikesAndCommentsDtoOut.setComments(post.getComments());
+        postWithLikesAndCommentsDtoOut.setComments(post.getComments().stream()
+                .map(comment -> new CommentDtoOut(comment.getContent(), comment.getCreatedBy().getUsername()))
+                .collect(Collectors.toList()));
+
         return postWithLikesAndCommentsDtoOut;
     }
 
     public List<PostWithLikesAndCommentsDtoOut> convertToDtoList(List<Post> posts) {
         return posts.stream()
-                .map(post -> new PostWithLikesAndCommentsDtoOut(post.getTitle(), post.getContent(), post.getCreatedBy().getUsername(), post.getCreatedAt(), post.getLikes().size(), post.getComments()))
+                .map(post -> new PostWithLikesAndCommentsDtoOut(post.getTitle(), post.getContent(), post.getCreatedBy().getUsername(),
+                        post.getCreatedAt(), post.getLikes().size(), post.getComments().stream()
+                        .map(comment -> new CommentDtoOut(comment.getContent(), comment.getCreatedBy()
+                                .getUsername())).collect(Collectors.toList())))
                 .collect(Collectors.toList());
     }
 
@@ -72,6 +75,7 @@ public class PostMapper {
             postDtoOut.setTitle(post.getTitle());
             postDtoOut.setContent(post.getContent());
             postDtoOut.setCreatedBy(post.getCreatedBy().getUsername());
+            postDtoOut.setCreatedAt(post.getCreatedAt());
             listPostDtoOut.add(postDtoOut);
         }
 

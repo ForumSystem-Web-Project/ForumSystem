@@ -14,6 +14,11 @@ public class ErrorMvcController {
         return "page-not-found";
     }
 
+    @RequestMapping("/not-found")
+    public String handleError2() {
+        return "access-denied";
+    }
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;

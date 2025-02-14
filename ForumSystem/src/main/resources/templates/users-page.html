@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
 
+<head>
     <meta charset="UTF-8">
-    <title>Forum System | Home</title>
+    <title>Forum System | Users</title>
     <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 
 </head>
-
-
 <body>
 
 <header>
@@ -31,33 +29,41 @@
     </div>
 </header>
 
-<section class="hero">
-    <div class="container">
-        <h1 style="color: black">Welcome to our Forum</h1>
-        <p style="color: black">Join the conversation, share your knowledge, and engage with a vibrant community.</p>
-        <a href="#" th:href="@{/auth/register}" class="btn">Get Started</a>
-    </div>
-</section>
+<div th:if="${users.isEmpty()}">
+    <h2 class="AllNoUsersText" th:text="#{users.title.empty}">No Users To Show </h2>
+</div>
 
-<section class="features">
-    <div class="container">
-        <h2>Why Join Us?</h2>
-        <div class="feature-boxes">
-            <div class="feature">
-                <h3>Engaging Discussions</h3>
-                <p>Explore and participate in a wide range of topics with insightful conversations.</p>
-            </div>
-            <div class="feature">
-                <h3>Easy to Use</h3>
-                <p>Our user-friendly interface ensures a seamless browsing and interaction experience.</p>
-            </div>
-            <div class="feature">
-                <h3>Community Driven</h3>
-                <p>Our members contribute and upvote the best content to keep discussions relevant.</p>
-            </div>
+<div th:unless="${users.isEmpty()}">
+
+    <h2 class="AllNoUsersText" th:text="#{users.title}">All Users </h2>
+
+    <div class="table">
+
+        <div class="header">
+
+            <div class="cell" th:text="#{user.label.username}"> Username </div>
+            <div class="cell" th:text="#{user.label.password}"> Password </div>
+            <div class="cell" th:text="#{user.label.firstName}"> First name </div>
+            <div class="cell" th:text="#{user.label.lastName}"> Last name </div>
+            <div class="cell" th:text="#{user.label.email}"> Email </div>
+
         </div>
+
+        <div class="row" th:each="user : ${users}">
+
+            <div class="cell">
+                <a href="#" th:href="@{/users/{id}(id = ${user.getId()})}" th:text="${user.username}">User</a>
+            </div>
+
+            <div class="cell" th:text="${user.password}"> 123456 </div>
+            <div class="cell" th:text="${user.firstName}"> Test </div>
+            <div class="cell" th:text="${user.lastName}"> Test </div>
+            <div class="cell" th:text="${user.email}"> Email </div>
+
+        </div>
+
     </div>
-</section>
+</div>
 
 <footer>
     <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>

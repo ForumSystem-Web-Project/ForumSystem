@@ -312,3 +312,36 @@ h2 {
 .home-btn-not-found:hover {
     background: #0056b3;
 }
+
+.posts-container, .post-details {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.post {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.view-post-btn, .like-btn, .comment-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.comments-container {
+    margin-top: 20px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 5px;
+}

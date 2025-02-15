@@ -14,7 +14,7 @@ public class ErrorMvcController {
         return "page-not-found";
     }
 
-    @RequestMapping("/not-found")
+    @RequestMapping("/access-denied")
     public String handleError2() {
         return "access-denied";
     }

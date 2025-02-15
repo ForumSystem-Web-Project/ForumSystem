@@ -3,13 +3,11 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Forum System | Home</title>
+    <title>Forum System | Single Post</title>
     <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 
 </head>
-
-
 <body>
 
 <header>
@@ -33,33 +31,29 @@
     </div>
 </header>
 
-<section class="hero">
-    <div class="container">
-        <h1 style="color: black">Welcome to our Forum</h1>
-        <p style="color: black">Join the conversation, share your knowledge, and engage with a vibrant community.</p>
-        <a href="#" th:href="@{/auth/register}" class="btn">Get Started</a>
-    </div>
-</section>
+<div class="post-details">
+    <p><strong>By:</strong> <span th:text="${post.getCreatedBy().getUsername()}">Username</span></p>
+    <p><strong>Posted On:</strong> <span th:text="${post.createdAt}">Date</span></p>
+    <p th:text="${post.content}">Post Content</p>
 
-<section class="features">
-    <div class="container">
-        <h2>Why Join Us?</h2>
-        <div class="feature-boxes">
-            <div class="feature">
-                <h3>Engaging Discussions</h3>
-                <p>Explore and participate in a wide range of topics with insightful conversations.</p>
-            </div>
-            <div class="feature">
-                <h3>Easy to Use</h3>
-                <p>Our user-friendly interface ensures a seamless browsing and interaction experience.</p>
-            </div>
-            <div class="feature">
-                <h3>Community Driven</h3>
-                <p>Our members contribute and upvote the best content to keep discussions relevant.</p>
+    <th:block th:if="${isAuthenticated}">
+        <form th:action="@{/posts/{id}/like(id=${post.getId()})}" method="post">
+            <button type="submit" class="like-btn">Like</button>
+        </form>
+
+        <h2>Comments</h2>
+        <div class="comments-container">
+            <div class="comment" th:each="comment : ${post.comments}">
+                <p><strong th:text="${comment.getCreatedBy().getUsername()}">User</strong>: <span th:text="${comment.content}">Comment</span></p>
             </div>
         </div>
-    </div>
-</section>
+
+        <form th:action="@{/posts/{id}/comment(id=${post.getId()})}" method="post">
+            <textarea name="content" placeholder="Write a comment..." required></textarea>
+            <button type="submit" class="comment-btn">Add Comment</button>
+        </form>
+    </th:block>
+</div>
 
 <footer>
     <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>

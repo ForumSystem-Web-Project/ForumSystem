@@ -1,11 +1,14 @@
 package com.example.forumsystem.helpers;
 
 import com.example.forumsystem.models.*;
+import com.example.forumsystem.repository.UserRepository;
+import com.example.forumsystem.repository.UserRepositoryImpl;
 import com.example.forumsystem.service.CommentService;
 import com.example.forumsystem.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,11 +18,13 @@ public class PostMapper {
 
     private final PostService postService;
     private final CommentService commentService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PostMapper(PostService postService, CommentService commentService) {
+    public PostMapper(PostService postService, CommentService commentService, UserRepository userRepository) {
         this.postService = postService;
         this.commentService = commentService;
+        this.userRepository = userRepository;
     }
 
     public Post fromDtoForCreation(PostDto postDTO){
@@ -43,6 +48,17 @@ public class PostMapper {
         postDtoOut.setCreatedBy(post.getCreatedBy().getUsername());
         postDtoOut.setCreatedAt(post.getCreatedAt());
         return postDtoOut;
+    }
+
+    public Post fromDto(PostDto postDto, User user){
+        Post post = new Post();
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setCreatedBy(post.getCreatedBy());
+        post.setCreatedAt(post.getCreatedAt());
+        post.setComments(post.getComments());
+        post.setLikes(post.getLikes());
+        return post;
     }
 
     public PostWithLikesAndCommentsDtoOut toDtoOutWithLikesAndComments(Post post) {

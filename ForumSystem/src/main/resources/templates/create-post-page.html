@@ -3,11 +3,13 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Forum System | All Posts</title>
+    <title>Forum System | Create Post</title>
     <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 
 </head>
+
+
 <body>
 
 <header>
@@ -31,18 +33,17 @@
     </div>
 </header>
 
-<div class="posts-container">
+<div class="container">
+    <h1>Create a New Post</h1>
+    <form th:action="@{/posts/create}" method="post" th:object="${post}">
+        <label>Title:</label>
+        <input type="text" th:field="*{title}" required>
 
-    <div th:if="${isAuthenticated}">
-        <a href="/posts/create" class="btn">Create a Post</a>
-    </div>
+        <label>Content:</label>
+        <textarea th:field="*{content}" required></textarea>
 
-    <div class="post" th:each="post : ${posts}">
-        <h2 th:text="${post.title}"></h2>
-        <th:block th:if="${isAuthenticated}">
-            <a th:href="@{/posts/{id}(id=${post.getId()})}" class="view-post-btn">View Post</a>
-        </th:block>
-    </div>
+        <button type="submit" class="btn">Create Post</button>
+    </form>
 </div>
 
 <footer>

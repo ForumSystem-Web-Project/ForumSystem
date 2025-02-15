@@ -1,17 +1,22 @@
 package com.example.forumsystem.controllers.mvc;
 
+import com.example.forumsystem.exeptions.AuthenticationFailureException;
+import com.example.forumsystem.exeptions.DuplicateEntityException;
+import com.example.forumsystem.helpers.AuthenticationHelper;
+import com.example.forumsystem.helpers.PostMapper;
 import com.example.forumsystem.models.FilterPostOptions;
 import com.example.forumsystem.models.Post;
+import com.example.forumsystem.models.PostDto;
+import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.PostService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,10 +25,14 @@ import java.util.List;
 public class PostsMvcController {
 
     private final PostService postService;
+    private final AuthenticationHelper authenticationHelper;
+    private final PostMapper postMapper;
 
     @Autowired
-    public PostsMvcController(PostService postService) {
+    public PostsMvcController(PostService postService, AuthenticationHelper authenticationHelper, PostMapper postMapper) {
         this.postService = postService;
+        this.authenticationHelper = authenticationHelper;
+        this.postMapper = postMapper;
     }
 
     @GetMapping
@@ -49,6 +58,42 @@ public class PostsMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "page-not-found";
+        }
+    }
+
+    @GetMapping("/create")
+    public String showNewPostPage(Model model, HttpSession httpSession) {
+        try {
+            authenticationHelper.tryGetUser(httpSession);
+        } catch (AuthenticationFailureException e){
+            return "redirect:/auth/login";
+        }
+
+        model.addAttribute("post", new PostDto());
+        return "create-post-page";
+    }
+
+    @PostMapping("/create")
+    public String createPost(@Valid @ModelAttribute("post") PostDto post, BindingResult errors, HttpSession httpSession) {
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(httpSession);
+        } catch (AuthenticationFailureException e){
+            return "redirect:/auth/login";
+        }
+
+        if (errors.hasErrors()) {
+            return "create-post-page";
+        }
+
+        try {
+            Post newPost = postMapper.fromDto(post, user);
+            postService.createPost(newPost, user);
+            return "redirect:/posts";
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("name", "post.exists", e.getMessage());
+            return "create-post-page";
         }
     }
 

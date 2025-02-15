@@ -33,16 +33,16 @@
     </div>
 </header>
 
-<div class="container">
-    <h1>Create a New Post</h1>
-    <form th:action="@{/posts/create}" method="post" th:object="${post}">
-        <label>Title:</label>
-        <input type="text" th:field="*{title}" required>
+<div class="container-create">
+    <h1 class="h1-create">Create a New Post</h1>
+    <form class="form-create" th:action="@{/posts/create}" method="post" th:object="${post}">
+        <label class="label-create">Title:</label>
+        <input class="input-create" type="text" th:field="*{title}" required>
 
-        <label>Content:</label>
-        <textarea th:field="*{content}" required></textarea>
+        <label class="label-create">Content:</label>
+        <textarea class="textarea-create" th:field="*{content}" required></textarea>
 
-        <button type="submit" class="btn">Create Post</button>
+        <button type="submit" class="button">Create Post</button>
     </form>
 </div>
 

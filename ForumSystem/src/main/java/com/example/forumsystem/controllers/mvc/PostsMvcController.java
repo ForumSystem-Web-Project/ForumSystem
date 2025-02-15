@@ -2,6 +2,7 @@ package com.example.forumsystem.controllers.mvc;
 
 import com.example.forumsystem.exeptions.AuthenticationFailureException;
 import com.example.forumsystem.exeptions.DuplicateEntityException;
+import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
 import com.example.forumsystem.helpers.PostMapper;
 import com.example.forumsystem.models.FilterPostOptions;
@@ -9,6 +10,7 @@ import com.example.forumsystem.models.Post;
 import com.example.forumsystem.models.PostDto;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.PostService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +96,28 @@ public class PostsMvcController {
         } catch (DuplicateEntityException e) {
             errors.rejectValue("name", "post.exists", e.getMessage());
             return "create-post-page";
+        }
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deletePost(@PathVariable int id, Model model, HttpSession httpSession) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(httpSession);
+        } catch (AuthenticationFailureException e){
+            return "redirect:/auth/login";
+        }
+
+        try {
+            postService.deletePost(id, user);
+
+            return "redirect:/posts";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "page-not-found";
+        } catch (UnauthorizedOperationException e){
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
         }
     }
 

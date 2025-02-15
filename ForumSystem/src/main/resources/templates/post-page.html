@@ -52,6 +52,10 @@
             <textarea name="content" placeholder="Write a comment..." required></textarea>
             <button type="submit" class="comment-btn">Add Comment</button>
         </form>
+
+        <div class="delete-btn">
+            <a class="btn-danger" href="#" th:href="@{/posts/{id}/delete(id = ${post.getId()})}"> Delete Post</a>
+        </div>
     </th:block>
 </div>
 

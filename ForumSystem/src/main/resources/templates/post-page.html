@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <form th:action="@{/posts/{id}/comment(id=${post.getId()})}" method="post">
+        <form th:action="@{/posts/{id}(id=${post.getId()})}" th:object="${comment}" method="post">
             <textarea name="content" placeholder="Write a comment..." required></textarea>
             <button type="submit" class="comment-btn">Add Comment</button>
         </form>

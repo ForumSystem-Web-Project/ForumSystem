@@ -31,7 +31,7 @@
     </div>
 </header>
 
-<form class="filer-form" action="#" th:action="@{${requestURI}}" th:object="${filterDto}" method="get">
+<form th:if="${isAuthenticated}" class="filer-form" action="#" th:action="@{${requestURI}}" th:object="${filterDto}" method="get">
     <div class="filter-container">
         <label class="filter-label">Filter by:</label>
         <input class="filter-input" type="text" placeholder="Post Title" th:field="*{title}">

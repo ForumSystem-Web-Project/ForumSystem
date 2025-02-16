@@ -4,8 +4,10 @@ import com.example.forumsystem.exeptions.AuthenticationFailureException;
 import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
+import com.example.forumsystem.helpers.CommentMapper;
 import com.example.forumsystem.helpers.PostMapper;
 import com.example.forumsystem.models.*;
+import com.example.forumsystem.service.CommentService;
 import com.example.forumsystem.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
@@ -27,12 +28,16 @@ public class PostsMvcController {
     private final PostService postService;
     private final AuthenticationHelper authenticationHelper;
     private final PostMapper postMapper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
     @Autowired
-    public PostsMvcController(PostService postService, AuthenticationHelper authenticationHelper, PostMapper postMapper) {
+    public PostsMvcController(PostService postService, AuthenticationHelper authenticationHelper, PostMapper postMapper, CommentService commentService, CommentMapper commentMapper) {
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.postMapper = postMapper;
+        this.commentService = commentService;
+        this.commentMapper = commentMapper;
     }
 
     @GetMapping
@@ -174,6 +179,40 @@ public class PostsMvcController {
             return "access-denied";
         }
     }
+
+    @PostMapping("/{id}")
+    public String addComment(@PathVariable int id,
+                             @Valid @ModelAttribute("comment") CommentDto commentDto,
+                             BindingResult errors,
+                             HttpSession httpSession, Model model) {
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(httpSession);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
+        if (errors.hasErrors()) {
+            model.addAttribute("error", "Invalid comment.");
+            return "post-page";
+        }
+
+        try {
+            Post post = postService.getById(id);
+            Comment newComment = commentMapper.fromDto(commentDto, post, user);
+            commentService.createComment(user, post, newComment);
+
+            return "redirect:/posts/" + id;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", "Post not found.");
+            return "page-not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", "You are not authorized to comment.");
+            return "access-denied";
+        }
+    }
+
 
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {

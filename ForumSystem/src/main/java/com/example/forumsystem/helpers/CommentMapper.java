@@ -1,8 +1,6 @@
 package com.example.forumsystem.helpers;
 
-import com.example.forumsystem.models.Comment;
-import com.example.forumsystem.models.CommentDto;
-import com.example.forumsystem.models.CommentDtoOut;
+import com.example.forumsystem.models.*;
 import com.example.forumsystem.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,5 +40,13 @@ public class CommentMapper {
         Comment commentDtoOut = commentService.getById(commentID);
         commentDtoOut.setContent(commentDto.getContent());
         return commentDtoOut;
+    }
+
+    public Comment fromDto(CommentDto dto, Post post, User user) {
+        Comment comment = new Comment();
+        comment.setContent(dto.getContent());
+        comment.setCreatedBy(user);
+        comment.setPost(post);
+        return comment;
     }
 }

@@ -43,6 +43,7 @@ public class PostMapper {
 
     public PostDtoOut toDtoOut(Post post) {
         PostDtoOut postDtoOut = new PostDtoOut();
+        postDtoOut.setId(post.getId());
         postDtoOut.setTitle(post.getTitle());
         postDtoOut.setContent(post.getContent());
         postDtoOut.setCreatedBy(post.getCreatedBy().getUsername());

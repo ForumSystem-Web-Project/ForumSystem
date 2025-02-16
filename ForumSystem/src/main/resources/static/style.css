@@ -79,9 +79,7 @@ footer {
     padding: 15px;
     background-color: #007bff;
     color: white;
-    position: relative;
     bottom: 0;
-    width: 100%;
     font-size: 14px;
 }
 
@@ -115,6 +113,7 @@ footer {
     text-decoration: none;
     font-weight: bold;
     border-radius: 5px;
+    border: 2px solid black;
 }
 
 .btn:hover {
@@ -481,12 +480,30 @@ textarea {
 .btn-danger{
     padding: 10px;
     text-align: center;
-    color: #fff;
-    background-color: #dc3545;
+    color: black;
+    background-color: #ef2f42;
     border: 2px solid black;
     border-radius: 10px;
 }
 
+.btn-danger:hover{
+    background: #dc3545;
+}
+
 .delete-btn{
     text-align: end;
+}
+
+.btn-update{
+    padding: 10px;
+    text-align: center;
+    color: black;
+    background-color: #ffdd57;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-right: 15px;
+}
+
+.btn-update:hover {
+    background: #ffcc00;
 }

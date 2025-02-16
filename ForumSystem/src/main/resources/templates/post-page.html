@@ -54,6 +54,7 @@
         </form>
 
         <div class="delete-btn">
+            <a class="btn-update" href="#" th:href="@{/posts/{id}/update(id = ${post.getId()})}"> Update Post</a>
             <a class="btn-danger" href="#" th:href="@{/posts/{id}/delete(id = ${post.getId()})}"> Delete Post</a>
         </div>
     </th:block>

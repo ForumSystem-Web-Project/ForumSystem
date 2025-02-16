@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Forum System | Update Post</title>
+    <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
+    <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
+
+</head>
+
+
+<body>
+
+<header>
+    <div>
+        <img src="../static/logo.png" th:src="@{/logo.png}" alt="Forum System logo"/>
+        <nav>
+
+            <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+            <span>|</span>
+            <a href="#" th:href="@{/posts}" th:text="#{navigation.posts}">Posts</a>
+            <span>|</span>
+            <a href="#" th:href="@{/users}" th:text="#{navigation.users}">Users</a>
+            <span>|</span>
+            <a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a>
+            <span>|</span>
+            <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{navigation.login}">Login</a>
+            <span th:unless="${isAuthenticated}">|</span>
+            <a th:if="${isAuthenticated}" href="#" th:href="@{/auth/logout}" th:text="#{navigation.logout}">Logout</a>
+
+        </nav>
+    </div>
+</header>
+
+<div class="container-create">
+    <h1 class="h1-create">Edit Post</h1>
+    <form class="form-create" th:action="@{/posts/{id}/update(id = ${post.getId()})}" method="post" th:object="${post}">
+        <label class="label-create" for="title">Title:</label>
+        <input class="input-create" type="text" id="title" th:field="*{title}" required>
+
+        <label class="label-create" for="content">Content:</label>
+        <textarea class="textarea-create" id="content" th:field="*{content}" required></textarea>
+
+        <button type="submit" class="button">Update Post</button>
+    </form>
+</div>
+
+<footer>
+    <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>
+</footer>
+
+</body>
+</html>

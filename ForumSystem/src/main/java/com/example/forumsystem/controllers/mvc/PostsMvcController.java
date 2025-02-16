@@ -8,6 +8,7 @@ import com.example.forumsystem.helpers.PostMapper;
 import com.example.forumsystem.models.*;
 import com.example.forumsystem.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +36,15 @@ public class PostsMvcController {
     }
 
     @GetMapping
-    public String showAllPosts(Model model) {
-        List<Post> posts = postService.getAll(
-                new FilterPostOptions(
-                        null,
-                        null,
-                        null,
-                        null,
-                        null));
-        model.addAttribute("posts", posts);
+    public String showAllPosts(@ModelAttribute("filterDto") FilterDto filterDto, Model model) {
+        FilterPostOptions filterPostOptions = new FilterPostOptions(
+                filterDto.getTitle(),
+                null,
+                null,
+                filterDto.getSortBy(),
+                filterDto.getSortOrder()
+        );
+        model.addAttribute("posts", postService.getAll(filterPostOptions));
         return "posts-page";
     }
 
@@ -177,5 +178,10 @@ public class PostsMvcController {
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
+    }
+
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
     }
 }

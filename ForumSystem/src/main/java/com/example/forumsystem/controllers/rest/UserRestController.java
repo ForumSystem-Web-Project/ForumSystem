@@ -1,4 +1,4 @@
-package com.example.forumsystem.controllers;
+package com.example.forumsystem.controllers.rest;
 
 import com.example.forumsystem.exeptions.DuplicateEntityException;
 import com.example.forumsystem.exeptions.EntityNotFoundException;

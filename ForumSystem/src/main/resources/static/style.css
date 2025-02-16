@@ -507,3 +507,62 @@ textarea {
 .btn-update:hover {
     background: #ffcc00;
 }
+
+/* Filter Form Container */
+.filer-form {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+}
+
+/* Flexbox for alignment */
+.filter-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Label Styling */
+.filter-label {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Input and Select Fields */
+.filter-input,
+.filter-select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 180px;
+    transition: border 0.3s;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+    border: 1px solid #007bff;
+    outline: none;
+}
+
+/* Button Styling */
+.filter-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 17px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.filter-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}

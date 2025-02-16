@@ -1,4 +1,4 @@
-package com.example.forumsystem.controllers;
+package com.example.forumsystem.controllers.rest;
 
 import com.example.forumsystem.exeptions.EntityNotFoundException;
 import com.example.forumsystem.exeptions.InvalidOperationException;

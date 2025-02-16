@@ -96,4 +96,13 @@ public class UserMapper {
 
         return userDto;
     }
+
+    public UserUpdateDto toUpdateDto(User user) {
+        UserUpdateDto dto = new UserUpdateDto();
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
+        dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+        return dto;
+    }
 }

@@ -8,6 +8,7 @@ import com.example.forumsystem.helpers.UserMapper;
 import com.example.forumsystem.models.*;
 import com.example.forumsystem.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,20 +48,27 @@ public class UserMvcController {
         return "users-page";
     }
 
-    @GetMapping({"{id}/update"})
-    public String showEditUserPage(@PathVariable int id, Model model, HttpSession httpSession) {
-        try {
-            authenticationHelper.tryGetUser(httpSession);
-        } catch (AuthenticationFailureException e){
-            return "redirect:/auth/login";
-        }
 
+    @GetMapping("/{id}/update")
+    public String showUpdateUserPage(@PathVariable int id, Model model, HttpSession session) {
         try {
-            User user1 = userMapper.toDto(id);
+            User loggedInUser = authenticationHelper.tryGetUser(session);
+
+            if (loggedInUser.getId() != id) {
+                throw new UnauthorizedOperationException("You can only update your own account.");
+            }
+
+            User user = userService.getUserById(id);
+            UserUpdateDto userUpdateDto = userMapper.toUpdateDto(user);
+
             model.addAttribute("userId", id);
-            model.addAttribute("user", user1);
+            model.addAttribute("user", userUpdateDto);
+
             return "update-user-page";
-        } catch (EntityNotFoundException e){
+
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "page-not-found";
         } catch (UnauthorizedOperationException e){
@@ -70,30 +78,30 @@ public class UserMvcController {
     }
 
     @PostMapping("/{id}/update")
-    public String updateUser(@PathVariable int id, @Valid @ModelAttribute("user") UserUpdateDto userUpdateDto,
+    public String updateUser(@PathVariable int id,
+                             @Valid @ModelAttribute("user") UserUpdateDto userUpdateDto,
                              BindingResult errors,
-                             HttpSession httpSession, Model model) {
-
-        User user;
+                             HttpSession session,
+                             Model model) {
         try {
-            user = authenticationHelper.tryGetUser(httpSession);
-        } catch (AuthenticationFailureException e){
-            return "redirect:/auth/login";
-        }
+            User loggedInUser = authenticationHelper.tryGetUser(session);
 
-        if (errors.hasErrors()) {
-            return "update-user-page";
-        }
+            if (loggedInUser.getId() != id) {
+                throw new UnauthorizedOperationException("You can only update your own account.");
+            }
 
-        try {
-            User newUser = userMapper.createUpdatedUserFromDto(userUpdateDto, id);
-            userService.updateUser(newUser, user);
+
+            User updatedUser = userMapper.createUpdatedUserFromDto(userUpdateDto, id);
+            userService.updateUser(updatedUser, loggedInUser);
 
             return "redirect:/users";
+
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
         } catch (DuplicateEntityException e) {
-            errors.rejectValue("name", "user.exists", e.getMessage());
+            errors.rejectValue("email", "user.exists", e.getMessage());
             return "update-user-page";
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             model.addAttribute("error", e.getMessage());
             return "page-not-found";
         } catch (UnauthorizedOperationException e){
@@ -105,5 +113,10 @@ public class UserMvcController {
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
+    }
+
+    @ModelAttribute("requestURI")
+    public String requestURI(final HttpServletRequest request) {
+        return request.getRequestURI();
     }
 }

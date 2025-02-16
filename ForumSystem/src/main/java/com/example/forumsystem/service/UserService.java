@@ -11,6 +11,8 @@ public interface UserService {
 
     User getById(User modifier, int id);
 
+    User getUserById(int id);
+
     User getByUsernameForAdmin(User admin, String username);
 
     User getByUsername(String username);

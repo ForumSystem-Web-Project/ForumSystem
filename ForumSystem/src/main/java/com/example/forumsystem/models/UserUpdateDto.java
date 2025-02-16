@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 
 public class UserUpdateDto {
 
+    private int id;
+
     @NotNull
     private String username;
 
@@ -27,6 +29,14 @@ public class UserUpdateDto {
     private String password;
 
     public UserUpdateDto() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {

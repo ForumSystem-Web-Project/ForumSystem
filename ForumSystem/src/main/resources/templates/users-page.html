@@ -39,10 +39,6 @@
 
     <h2 class="AllNoUsersText" th:text="#{users.title}">All Users </h2>
 
-    <div th:if="${isAuthenticated}" style="text-align: center">
-        <a href="/users/{id}/update" class="btn">Update Your Information</a>
-    </div>
-
     <div class="table">
 
         <div class="header">
@@ -56,7 +52,10 @@
 
         <div class="row" th:each="user : ${users}">
 
-            <div class="cell" th:text="${user.username}"> Username </div>
+            <div class="cell">
+                <a href="#" th:href="@{/users/{id}/update(id = ${user.getId()})}" th:text="${user.username}">User</a>
+            </div>
+
             <div class="cell" th:text="${user.firstName}"> Test </div>
             <div class="cell" th:text="${user.lastName}"> Test </div>
             <div class="cell" th:text="${user.email}"> Email </div>

@@ -33,11 +33,9 @@
 
 <div class="log-register">
     <h1>Update Your Information</h1>
-    <form th:action="@{/users/update}" method="post" th:object="${user}">
+    <form th:action="@{${requestURI}}" method="post" th:object="${user}">
 
-        <label class="form-label" for="username">Username:</label>
-        <br>
-        <input class="form-input" type="text" id="username" th:field="*{username}" readonly>
+        <label class="form-label">Username (cannot be changed)</label>
         <br><br>
 
         <label class="form-label" for="firstName">First Name:</label>

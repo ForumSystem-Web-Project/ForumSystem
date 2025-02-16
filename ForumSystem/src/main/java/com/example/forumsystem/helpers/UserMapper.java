@@ -64,6 +64,16 @@ public class UserMapper {
         return userOut;
     }
 
+    public User toDto(int id) {
+        User user = new User();
+        user.setFirstName(user.getFirstName());
+        user.setLastName(user.getLastName());
+        user.setUsername(userRepository.getById(id).getUsername());
+        user.setPassword(user.getPassword());
+        user.setEmail(user.getEmail());
+        return user;
+    }
+
     public UserDtoOut createDtoOut (User user) {
         UserDtoOut userOut = new UserDtoOut();
         userOut.setFirstName(user.getFirstName());

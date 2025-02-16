@@ -7,6 +7,9 @@ import jakarta.validation.constraints.Size;
 
 public class UserUpdateDto {
 
+    @NotNull
+    private String username;
+
     @NotNull(message = "First name can't be empty")
     @Size(min = 4, max = 32, message = "Name should be between 2 and 20 symbols!")
     private String firstName;
@@ -24,6 +27,14 @@ public class UserUpdateDto {
     private String password;
 
     public UserUpdateDto() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {

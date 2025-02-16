@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
+
     <meta charset="UTF-8">
-    <title>Forum System | Users</title>
+    <title>Forum System | Update User</title>
     <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 
@@ -31,40 +31,39 @@
     </div>
 </header>
 
-<div th:if="${users.isEmpty()}">
-    <h2 class="AllNoUsersText" th:text="#{users.title.empty}">No Users To Show </h2>
+<div class="log-register">
+    <h1>Update Your Information</h1>
+    <form th:action="@{/users/update}" method="post" th:object="${user}">
+
+        <label class="form-label" for="username">Username:</label>
+        <br>
+        <input class="form-input" type="text" id="username" th:field="*{username}" readonly>
+        <br><br>
+
+        <label class="form-label" for="firstName">First Name:</label>
+        <br>
+        <input class="form-input" type="text" id="firstName" th:field="*{firstName}" required>
+        <br><br>
+
+        <label class="form-label" for="lastName">Last Name:</label>
+        <br>
+        <input class="form-input" type="text" id="lastName" th:field="*{lastName}" required>
+        <br><br>
+
+        <label class="form-label" for="email">Email:</label>
+        <br>
+        <input class="form-input" type="email" id="email" th:field="*{email}" required>
+        <br><br>
+
+        <label class="form-label" for="password">New Password (leave empty to keep current):</label>
+        <br>
+        <input class="form-input" type="password" id="password" name="password">
+        <br><br>
+
+        <button type="submit" class="button">Update Info</button>
+    </form>
 </div>
 
-<div th:unless="${users.isEmpty()}">
-
-    <h2 class="AllNoUsersText" th:text="#{users.title}">All Users </h2>
-
-    <div th:if="${isAuthenticated}" style="text-align: center">
-        <a href="/users/{id}/update" class="btn">Update Your Information</a>
-    </div>
-
-    <div class="table">
-
-        <div class="header">
-
-            <div class="cell" th:text="#{user.label.username}"> Username </div>
-            <div class="cell" th:text="#{user.label.firstName}"> First name </div>
-            <div class="cell" th:text="#{user.label.lastName}"> Last name </div>
-            <div class="cell" th:text="#{user.label.email}"> Email </div>
-
-        </div>
-
-        <div class="row" th:each="user : ${users}">
-
-            <div class="cell" th:text="${user.username}"> Username </div>
-            <div class="cell" th:text="${user.firstName}"> Test </div>
-            <div class="cell" th:text="${user.lastName}"> Test </div>
-            <div class="cell" th:text="${user.email}"> Email </div>
-
-        </div>
-
-    </div>
-</div>
 
 <footer>
     <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>

@@ -37,7 +37,7 @@
     <p th:text="${post.content}">Post Content</p>
 
     <th:block th:if="${isAuthenticated}">
-        <form th:action="@{/posts/{id}/like(id=${post.getId()})}" method="post">
+        <form th:action="@{/posts/{id}(id=${post.getId()})}" method="post">
             <button type="submit" class="like-btn">Like</button>
         </form>
 

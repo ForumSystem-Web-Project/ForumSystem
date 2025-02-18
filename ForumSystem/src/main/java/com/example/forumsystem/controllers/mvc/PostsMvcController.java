@@ -280,6 +280,35 @@ public class PostsMvcController {
         }
     }
 
+    @GetMapping("/{postId}/comment/delete/{commentId}")
+    public String deleteComment(@PathVariable int postId, @PathVariable int commentId, Model model, HttpSession httpSession) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(httpSession);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            // Ensure the comment exists
+            Comment comment = commentService.getById(commentId);
+
+            if (!comment.getCreatedBy().equals(user)) {
+                throw new UnauthorizedOperationException("You are not allowed to delete this comment.");
+            }
+
+            commentService.deleteComment(user, commentId);
+
+            return "redirect:/posts/" + postId;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "page-not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
+        }
+    }
+
 //    @PostMapping("/{id}/like")
 //    public String likePost(@PathVariable int id,
 //                           HttpSession httpSession, Model model) {

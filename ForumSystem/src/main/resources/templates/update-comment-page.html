@@ -43,7 +43,11 @@
         <label class="label-create" for="content">Content:</label>
         <textarea class="textarea-create" id="content" th:field="*{content}" required></textarea>
 
-        <button type="submit" class="button">Update Comment</button>
+        <div>
+            <button type="submit" class="btn-update-comment">Update Comment</button>
+            <a href="#" class="btn-danger-comment" th:href="@{/posts/{postId}/comment/delete/{commentId}(postId=${post.getId()}, commentId=${comment.getCommentId()})}">Delete Comment</a>
+        </div>
+
     </form>
 </div>
 

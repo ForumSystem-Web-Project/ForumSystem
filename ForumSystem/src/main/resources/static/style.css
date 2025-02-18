@@ -508,7 +508,6 @@ textarea {
     background: #ffcc00;
 }
 
-/* Filter Form Container */
 .filer-form {
     display: flex;
     justify-content: center;
@@ -580,4 +579,35 @@ textarea {
     border: 1px solid #0056b3;
     color: #0056b3;
     font-size: 16px;
+}
+
+.btn-danger-comment{
+    padding: 8.5px;
+    text-align: center;
+    color: black;
+    background-color: #ef2f42;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.btn-danger-comment:hover{
+    background: #dc3545;
+}
+
+
+.btn-update-comment{
+    padding: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    text-decoration: underline;
+    text-align: center;
+    color: black;
+    background-color: #ffdd57;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-right: 15px;
+}
+
+.btn-update-comment:hover {
+    background: #ffcc00;
 }

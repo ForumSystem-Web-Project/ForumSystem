@@ -32,14 +32,20 @@
 </header>
 
 <div class="post-details">
-    <p><strong>By:</strong> <span th:text="${post.getCreatedBy().getUsername()}">Username</span></p>
+    <p><strong>By:</strong> <span th:text="${post.createdBy != null ? post.createdBy.username : 'Unknown Author'}">Username</span></p>
     <p><strong>Posted On:</strong> <span th:text="${post.createdAt}">Date</span></p>
     <p th:text="${post.content}">Post Content</p>
 
     <th:block th:if="${isAuthenticated}">
-        <form th:action="@{/posts/{id}(id=${post.getId()})}" method="post">
-            <button type="submit" class="like-btn">Like</button>
-        </form>
+        <div class="like-dislike-container">
+            <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post">
+                <button type="submit" class="like-btn">Like</button>
+            </form>
+            <form th:action="@{/posts/{postId}/dislike(postId=${post.id})}" method="post">
+                <button type="submit" class="dislike-btn">Dislike</button>
+            </form>
+        </div>
+
 
         <h2>Comments</h2>
         <div class="comments-container">

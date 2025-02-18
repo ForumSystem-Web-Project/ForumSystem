@@ -290,7 +290,6 @@ public class PostsMvcController {
         }
 
         try {
-            // Ensure the comment exists
             Comment comment = commentService.getById(commentId);
 
             if (!comment.getCreatedBy().equals(user)) {
@@ -309,52 +308,47 @@ public class PostsMvcController {
         }
     }
 
-//    @PostMapping("/{id}/like")
-//    public String likePost(@PathVariable int id,
-//                           HttpSession httpSession, Model model) {
-//
-//        User user;
-//        try {
-//            user = authenticationHelper.tryGetUser(httpSession);
-//        } catch (AuthenticationFailureException e) {
-//            return "redirect:/auth/login";
-//        }
-//
-//        try {
-//            postService.likePost(id, user);
-//            return "redirect:/posts/" + id;
-//        } catch (EntityNotFoundException e) {
-//            model.addAttribute("error", "Post not found.");
-//            return "page-not-found";
-//        } catch (UnauthorizedOperationException e) {
-//            model.addAttribute("error", "You are not authorized to like this post.");
-//            return "access-denied";
-//        }
-//    }
-//
-//    @PostMapping("/{id}/dislike")
-//    public String dislikePost(@PathVariable int id,
-//                              HttpSession httpSession, Model model) {
-//
-//        User user;
-//        try {
-//            user = authenticationHelper.tryGetUser(httpSession);
-//        } catch (AuthenticationFailureException e) {
-//            return "redirect:/auth/login";
-//        }
-//
-//        try {
-//            postService.unlikePost(id, user);
-//            return "redirect:/posts/" + id;
-//        } catch (EntityNotFoundException e) {
-//            model.addAttribute("error", "Post not found.");
-//            return "page-not-found";
-//        } catch (UnauthorizedOperationException e) {
-//            model.addAttribute("error", "You are not authorized to dislike this post.");
-//            return "access-denied";
-//        }
-//    }
+    @PostMapping("/{postId}/like")
+    public String likePost(@PathVariable int postId, HttpSession httpSession, Model model) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(httpSession);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
 
+        try {
+            postService.likePost(postId, user);
+            return "redirect:/posts/" + postId;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", "Post not found.");
+            return "page-not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", "You are not authorized to like this post.");
+            return "access-denied";
+        }
+    }
+
+    @PostMapping("/{postId}/dislike")
+    public String dislikePost(@PathVariable int postId, HttpSession httpSession, Model model) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(httpSession);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            postService.unlikePost(postId, user);
+            return "redirect:/posts/" + postId;
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", "Post not found.");
+            return "page-not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", "You are not authorized to like this post.");
+            return "access-denied";
+        }
+    }
 
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {

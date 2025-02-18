@@ -14,53 +14,47 @@
     <div>
         <img src="../static/logo.png" th:src="@{/logo.png}" alt="Forum System logo"/>
         <nav>
-
-            <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
-            <span>|</span>
-            <a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a>
-            <span>|</span>
             <a href="#" th:href="@{/admin/logout}" th:text="#{navigation.logout}">Logout</a>
-
         </nav>
     </div>
 </header>
 
-<form class="filer-form" action="#" th:action="@{${requestURI}}" th:object="${filterDto}" method="get">
-    <div class="filter-container">
-        <label class="filter-label">Filter by:</label>
-        <input class="filter-input" type="text" placeholder="Post Title" th:field="*{title}">
+<!--<form class="filer-form" action="#" th:action="@{${requestURI}}" th:object="${filterDto}" method="get">-->
+<!--    <div class="filter-container">-->
+<!--        <label class="filter-label">Filter by:</label>-->
+<!--        <input class="filter-input" type="text" placeholder="Post Title" th:field="*{title}">-->
 
-        <label class="filter-label">Sort By:</label>
-        <select class="filter-select" th:field="*{sortBy}">
-            <option value="">Sort by</option>
-            <option value="title">By title</option>
-        </select>
+<!--        <label class="filter-label">Sort By:</label>-->
+<!--        <select class="filter-select" th:field="*{sortBy}">-->
+<!--            <option value="">Sort by</option>-->
+<!--            <option value="title">By title</option>-->
+<!--        </select>-->
 
-        <label class="filter-label">Sort Order:</label>
-        <select class="filter-select" th:field="*{sortOrder}">
-            <option value="">Ascending</option>
-            <option value="desc">Descending</option>
+<!--        <label class="filter-label">Sort Order:</label>-->
+<!--        <select class="filter-select" th:field="*{sortOrder}">-->
+<!--            <option value="">Ascending</option>-->
+<!--            <option value="desc">Descending</option>-->
 
-        </select>
+<!--        </select>-->
 
-        <input class="filter-button" type="submit" value="Filter">
-    </div>
-</form>
+<!--        <input class="filter-button" type="submit" value="Filter">-->
+<!--    </div>-->
+<!--</form>-->
 
 
-<div class="posts-container">
+<!--<div class="posts-container">-->
 
-    <div style="text-align: center">
-        <a href="/posts/create" class="btn">Create a Post</a>
-    </div>
+<!--    <div style="text-align: center">-->
+<!--        <a href="/posts/create" class="btn">Create a Post</a>-->
+<!--    </div>-->
 
-    <div class="post" th:each="post : ${posts}">
-        <h2 th:text="${post.title}"></h2>
-        <th:block>
-            <a th:href="@{/posts/{id}(id=${post.getId()})}" class="view-post-btn">View Post</a>
-        </th:block>
-    </div>
-</div>
+<!--    <div class="post" th:each="post : ${posts}">-->
+<!--        <h2 th:text="${post.title}"></h2>-->
+<!--        <th:block>-->
+<!--            <a th:href="@{/posts/{id}(id=${post.getId()})}" class="view-post-btn">View Post</a>-->
+<!--        </th:block>-->
+<!--    </div>-->
+<!--</div>-->
 
 <!--<form class="filer-form" action="#" th:action="@{/admin/users}" th:object="${filterUserDto}" method="get">-->
 <!--    <div class="filter-container">-->

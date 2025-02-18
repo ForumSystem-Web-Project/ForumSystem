@@ -4,6 +4,7 @@ import com.example.forumsystem.exeptions.AuthenticationFailureException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
 import com.example.forumsystem.models.*;
 import com.example.forumsystem.service.PostService;
+import com.example.forumsystem.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,13 @@ import org.springframework.web.bind.annotation.*;
 public class AdminMvcController {
 
     private final PostService postService;
+    private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public AdminMvcController(PostService postService, AuthenticationHelper authenticationHelper) {
+    public AdminMvcController(PostService postService, UserService userService, AuthenticationHelper authenticationHelper) {
         this.postService = postService;
+        this.userService = userService;
         this.authenticationHelper = authenticationHelper;
     }
 
@@ -32,19 +35,23 @@ public class AdminMvcController {
     }
 
     @PostMapping("/login")
-    public String handleLogin(HttpSession session, Model model, LoginDto loginDto) {
-
+    public String handleLogin(HttpSession session, Model model, @ModelAttribute("login") LoginDto loginDto) {
         try {
-            User user = new User();
             authenticationHelper.verifyAuthentication(loginDto.getUsername(), loginDto.getPassword());
-            if (!user.isAdmin()) {
+
+            User user = userService.getByUsername(loginDto.getUsername());
+
+            if (user == null || !user.isAdmin()) {
                 model.addAttribute("error", "Access Denied! Only administrators can log in.");
+                model.addAttribute("login", new LoginDto()); // Ensure login object is added back
                 return "admin-login-page";
             }
+
             session.setAttribute("admin", user);
             return "redirect:/admin/dashboard";
         } catch (AuthenticationFailureException e) {
             model.addAttribute("error", "Invalid credentials.");
+            model.addAttribute("login", new LoginDto());
             return "admin-login-page";
         }
     }

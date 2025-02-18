@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Forum System | About</title>
-    <link rel="icon" href="../static/favicon.PNG" th:href="@{/favicon.PNG}">
+    <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 </head>
 
@@ -13,13 +13,20 @@
 
 <header>
     <div>
-        <img src="../static/logo.PNG" th:src="@{/logo.png}" alt="Forum System logo"/>
+        <img src="../static/logo.png" th:src="@{/logo.png}" alt="Forum System logo"/>
         <nav>
 
             <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
             <span>|</span>
+            <a href="#" th:href="@{/posts}" th:text="#{navigation.posts}">Posts</a>
+            <span>|</span>
+            <a href="#" th:href="@{/users}" th:text="#{navigation.users}">Users</a>
+            <span>|</span>
             <a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a>
             <span>|</span>
+            <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{navigation.login}">Login</a>
+            <span th:unless="${isAuthenticated}">|</span>
+            <a th:if="${isAuthenticated}" href="#" th:href="@{/auth/logout}" th:text="#{navigation.logout}">Logout</a>
 
         </nav>
     </div>
@@ -28,13 +35,13 @@
 <div>
 
     <h2>Our Mission</h2>
-    <p>Our goal is to provide a structured and user-friendly forum where users can create posts, add comments, and upvote/down-vote content based on relevance and engagement. We believe in the power of community-driven discussions and aim to facilitate a platform that encourages learning, collaboration, and constructive debates.</p>
+    <p>Our goal is to provide a structured and user-friendly forum where users can create posts, add comments, and like content based on relevance and engagement. We believe in the power of community-driven discussions and aim to facilitate a platform that encourages learning, collaboration, and constructive debates.</p>
 
     <h2>Key Features</h2>
     <ul>
         <li><strong>User-Friendly Interface:</strong> Our platform is designed with a simple and intuitive interface that makes navigation seamless for both new and experienced users.</li>
         <li><strong>Post & Comment System:</strong> Users can create posts on the forum’s core topic and engage in discussions through comments.</li>
-        <li><strong>Voting Mechanism:</strong> Users can upvote or down-vote posts and comments to highlight the most relevant content.</li>
+        <li><strong>Voting Mechanism:</strong> Users can like posts to highlight the most relevant content.</li>
         <li><strong>User Authentication & Profiles:</strong> Secure registration and login system with user profiles that include names, email addresses, usernames, and profile pictures.</li>
         <li><strong>Sorting & Filtering:</strong> Easily browse and organize posts by popularity, date, or level of engagement.</li>
         <li><strong>Administrative Controls:</strong> Forum administrators have the ability to manage content, block users, and maintain a respectful and safe environment.</li>
@@ -43,7 +50,7 @@
     <h2>User Access & Roles</h2>
     <ul>
         <li><strong>Public Access:</strong> Anonymous users can view core platform features, recent posts, and top discussions. Registration is required to participate.</li>
-        <li><strong>Registered Users:</strong> Gain full access to create, comment, upvote/down-vote, and interact with posts.</li>
+        <li><strong>Registered Users:</strong> Gain full access to create, comment, like and interact with posts.</li>
         <li><strong>Admins:</strong> Have additional privileges, including user moderation, post management, and forum oversight.</li>
     </ul>
 

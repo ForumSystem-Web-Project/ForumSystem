@@ -4,6 +4,8 @@ import java.sql.Timestamp;
 
 public class PostDtoOut {
 
+    private int id;
+
     private String title;
 
     private String content;
@@ -13,6 +15,14 @@ public class PostDtoOut {
     private Timestamp createdAt;
 
     public PostDtoOut() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {

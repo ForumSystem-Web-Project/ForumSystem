@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Forum System | Single Post</title>
+    <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
+    <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
+
+</head>
+<body>
+
+<header>
+    <div>
+        <img src="../static/logo.png" th:src="@{/logo.png}" alt="Forum System logo"/>
+        <nav>
+
+            <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+            <span>|</span>
+            <a href="#" th:href="@{/posts}" th:text="#{navigation.posts}">Posts</a>
+            <span>|</span>
+            <a href="#" th:href="@{/users}" th:text="#{navigation.users}">Users</a>
+            <span>|</span>
+            <a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a>
+            <span>|</span>
+            <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{navigation.login}">Login</a>
+            <span th:unless="${isAuthenticated}">|</span>
+            <a th:if="${isAuthenticated}" href="#" th:href="@{/auth/logout}" th:text="#{navigation.logout}">Logout</a>
+
+        </nav>
+    </div>
+</header>
+
+<div class="post-details">
+    <p><strong>By:</strong> <span th:text="${post.createdBy != null ? post.createdBy.username : 'Unknown Author'}">Username</span></p>
+    <p><strong>Posted On:</strong> <span th:text="${post.createdAt}">Date</span></p>
+    <p th:text="${post.content}">Post Content</p>
+
+    <th:block th:if="${isAuthenticated}">
+        <div class="like-dislike-container">
+            <form th:action="@{/posts/{postId}/like(postId=${post.id})}" method="post">
+                <button type="submit" class="like-btn">Like</button>
+            </form>
+            <form th:action="@{/posts/{postId}/dislike(postId=${post.id})}" method="post">
+                <button type="submit" class="dislike-btn">Dislike</button>
+            </form>
+        </div>
+
+
+        <h2>Comments</h2>
+        <div class="comments-container">
+            <div class="comment" th:each="comment : ${post.comments}">
+                <p>
+                    <strong th:text="${comment.getCreatedBy().getUsername()}">User</strong>:
+                    <span th:text="${comment.content}">Comment</span>
+                    <a class="btn-edit"
+                        th:href="@{/posts/{postId}/comment/update/{commentId}(postId=${post.getId()}, commentId=${comment.getCommentId()})}">
+                    Edit Comment
+                </a>
+                </p>
+
+
+            </div>
+        </div>
+
+        <form th:action="@{/posts/{id}(id=${post.getId()})}" th:object="${comment}" method="post">
+            <textarea name="content" placeholder="Write a comment..." required></textarea>
+            <button type="submit" class="comment-btn">Add Comment</button>
+        </form>
+
+        <div class="delete-btn">
+            <a class="btn-update" href="#" th:href="@{/posts/{id}/update(id = ${post.getId()})}"> Update Post</a>
+            <a class="btn-danger" href="#" th:href="@{/posts/{id}/delete(id = ${post.getId()})}"> Delete Post</a>
+        </div>
+    </th:block>
+</div>
+
+<footer>
+    <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>
+</footer>
+
+</body>
+</html>

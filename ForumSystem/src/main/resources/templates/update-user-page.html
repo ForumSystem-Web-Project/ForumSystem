@@ -3,13 +3,11 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Forum System | Home</title>
+    <title>Forum System | Update User</title>
     <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 
 </head>
-
-
 <body>
 
 <header>
@@ -25,8 +23,6 @@
             <span>|</span>
             <a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a>
             <span>|</span>
-            <a th:href="@{/admin/login}">Admin</a>
-            <span>|</span>
             <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{navigation.login}">Login</a>
             <span th:unless="${isAuthenticated}">|</span>
             <a th:if="${isAuthenticated}" href="#" th:href="@{/auth/logout}" th:text="#{navigation.logout}">Logout</a>
@@ -35,33 +31,37 @@
     </div>
 </header>
 
-<section class="hero">
-    <div class="container">
-        <h1 style="color: black">Welcome to our Forum</h1>
-        <p style="color: black">Join the conversation, share your knowledge, and engage with a vibrant community.</p>
-        <a href="#" th:href="@{/auth/register}" class="btn">Get Started</a>
-    </div>
-</section>
+<div class="log-register">
+    <h1>Update Your Information</h1>
+    <form th:action="@{${requestURI}}" method="post" th:object="${user}">
 
-<section class="features">
-    <div class="container">
-        <h2>Why Join Us?</h2>
-        <div class="feature-boxes">
-            <div class="feature">
-                <h3>Engaging Discussions</h3>
-                <p>Explore and participate in a wide range of topics with insightful conversations.</p>
-            </div>
-            <div class="feature">
-                <h3>Easy to Use</h3>
-                <p>Our user-friendly interface ensures a seamless browsing and interaction experience.</p>
-            </div>
-            <div class="feature">
-                <h3>Community Driven</h3>
-                <p>Our members contribute and upvote the best content to keep discussions relevant.</p>
-            </div>
-        </div>
-    </div>
-</section>
+        <label class="form-label">Username (cannot be changed)</label>
+        <br><br>
+
+        <label class="form-label" for="firstName">First Name:</label>
+        <br>
+        <input class="form-input" type="text" id="firstName" th:field="*{firstName}" required>
+        <br><br>
+
+        <label class="form-label" for="lastName">Last Name:</label>
+        <br>
+        <input class="form-input" type="text" id="lastName" th:field="*{lastName}" required>
+        <br><br>
+
+        <label class="form-label" for="email">Email:</label>
+        <br>
+        <input class="form-input" type="email" id="email" th:field="*{email}" required>
+        <br><br>
+
+        <label class="form-label" for="password">New Password (leave empty to keep current):</label>
+        <br>
+        <input class="form-input" type="password" id="password" name="password">
+        <br><br>
+
+        <button type="submit" class="button">Update Info</button>
+    </form>
+</div>
+
 
 <footer>
     <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>

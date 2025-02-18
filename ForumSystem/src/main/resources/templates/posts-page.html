@@ -3,13 +3,11 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Forum System | Home</title>
+    <title>Forum System | All Posts</title>
     <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 
 </head>
-
-
 <body>
 
 <header>
@@ -25,8 +23,6 @@
             <span>|</span>
             <a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a>
             <span>|</span>
-            <a th:href="@{/admin/login}">Admin</a>
-            <span>|</span>
             <a th:unless="${isAuthenticated}" href="#" th:href="@{/auth/login}" th:text="#{navigation.login}">Login</a>
             <span th:unless="${isAuthenticated}">|</span>
             <a th:if="${isAuthenticated}" href="#" th:href="@{/auth/logout}" th:text="#{navigation.logout}">Logout</a>
@@ -35,33 +31,42 @@
     </div>
 </header>
 
-<section class="hero">
-    <div class="container">
-        <h1 style="color: black">Welcome to our Forum</h1>
-        <p style="color: black">Join the conversation, share your knowledge, and engage with a vibrant community.</p>
-        <a href="#" th:href="@{/auth/register}" class="btn">Get Started</a>
-    </div>
-</section>
+<form th:if="${isAuthenticated}" class="filer-form" action="#" th:action="@{${requestURI}}" th:object="${filterDto}" method="get">
+    <div class="filter-container">
+        <label class="filter-label">Filter by:</label>
+        <input class="filter-input" type="text" placeholder="Post Title" th:field="*{title}">
 
-<section class="features">
-    <div class="container">
-        <h2>Why Join Us?</h2>
-        <div class="feature-boxes">
-            <div class="feature">
-                <h3>Engaging Discussions</h3>
-                <p>Explore and participate in a wide range of topics with insightful conversations.</p>
-            </div>
-            <div class="feature">
-                <h3>Easy to Use</h3>
-                <p>Our user-friendly interface ensures a seamless browsing and interaction experience.</p>
-            </div>
-            <div class="feature">
-                <h3>Community Driven</h3>
-                <p>Our members contribute and upvote the best content to keep discussions relevant.</p>
-            </div>
-        </div>
+        <label class="filter-label">Sort By:</label>
+        <select class="filter-select" th:field="*{sortBy}">
+            <option value="">Sort by</option>
+            <option value="title">By title</option>
+        </select>
+
+        <label class="filter-label">Sort Order:</label>
+        <select class="filter-select" th:field="*{sortOrder}">
+            <option value="">Ascending</option>
+            <option value="desc">Descending</option>
+
+        </select>
+
+        <input class="filter-button" type="submit" value="Filter">
     </div>
-</section>
+</form>
+
+
+<div class="posts-container">
+
+    <div th:if="${isAuthenticated}" style="text-align: center">
+        <a href="/posts/create" class="btn">Create a Post</a>
+    </div>
+
+    <div class="post" th:each="post : ${posts}">
+        <h2 th:text="${post.title}"></h2>
+        <th:block th:if="${isAuthenticated}">
+            <a th:href="@{/posts/{id}(id=${post.getId()})}" class="view-post-btn">View Post</a>
+        </th:block>
+    </div>
+</div>
 
 <footer>
     <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>

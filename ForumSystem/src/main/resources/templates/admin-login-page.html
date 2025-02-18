@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="UTF-8">
+    <title>Forum System | Admin Login</title>
+    <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
+    <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
+
+</head>
+
+
+<body>
+
+<header>
+    <div>
+        <img src="../static/logo.png" th:src="@{/logo.png}" alt="Forum System logo"/>
+        <nav>
+
+            <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+            <span>|</span>
+            <a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a>
+            <span>|</span>
+            <a href="#" th:href="@{/admin/logout}" th:text="#{navigation.logout}">Logout</a>
+
+        </nav>
+    </div>
+</header>
+
+<div class="log-register">
+
+    <h2>Login</h2>
+
+    <form action="#" th:action="@{/admin/login}" th:object="${login}" method="post">
+
+        <label class="form-label" th:text="#{user.label.username}"> Username </label>
+        <br>
+        <input class="form-input" type="text" th:field="*{username}" placeholder="Enter username:">
+        <label class="form-error" th:errors="*{username}"> Username error placeholder </label>
+        <br><br>
+
+        <label class="form-label" th:text="#{user.label.password}"> Password </label>
+        <br>
+        <input class="form-input" type="password" th:field="*{password}" placeholder="Enter password:">
+        <label class="form-error" th:errors="*{password}"> Password error placeholder </label>
+        <br> <br>
+
+        <input class="btn-primary" type="submit" value="Login">
+
+    </form>
+
+    <p th:if="${error}" style="color: red;" th:text="${error}"></p>
+
+</div>
+
+<footer>
+    <small th:text="${'©️ Copyright ' + #dates.year(#dates.createNow()) + ' BeerTag'}">Copyright 2025 BeerTag</small>
+</footer>
+
+</body>
+</html>

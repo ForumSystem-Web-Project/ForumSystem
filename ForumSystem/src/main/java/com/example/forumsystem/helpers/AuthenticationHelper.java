@@ -1,9 +1,11 @@
 package com.example.forumsystem.helpers;
 
-import com.example.forumsystem.exceptions.EntityNotFoundException;
-import com.example.forumsystem.exceptions.UnauthorizedOperationException;
+import com.example.forumsystem.exeptions.AuthenticationFailureException;
+import com.example.forumsystem.exeptions.EntityNotFoundException;
+import com.example.forumsystem.exeptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ public class AuthenticationHelper {
 
     private static final String AUTHORIZATION_HEADER_NAME = "Authorization";
     private static final String INVALID_AUTHENTICATION_ERROR = "Invalid authentication.";
+    public static final String AUTHENTICATION_FAILURE = "Wrong username or password! Please try again.";
 
     private final UserService userService;
 

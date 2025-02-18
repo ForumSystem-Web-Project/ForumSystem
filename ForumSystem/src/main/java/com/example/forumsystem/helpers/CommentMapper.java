@@ -49,4 +49,13 @@ public class CommentMapper {
         comment.setPost(post);
         return comment;
     }
+
+    public CommentDtoOut toDtoOut(Comment comment) {
+        CommentDtoOut commentDtoOut = new CommentDtoOut();
+        commentDtoOut.setCommentId(comment.getCommentId());
+        commentDtoOut.setCommentId(comment.getCommentId());
+        commentDtoOut.setContent(comment.getContent());
+        commentDtoOut.setCreatedBy(comment.getCreatedBy().getUsername());
+        return commentDtoOut;
+    }
 }

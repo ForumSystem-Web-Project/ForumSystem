@@ -213,6 +213,73 @@ public class PostsMvcController {
         }
     }
 
+    @GetMapping("/{postId}/comment/update/{commentId}")
+    public String showEditCommentPage(@PathVariable int postId, @PathVariable int commentId, Model model, HttpSession httpSession) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(httpSession);
+            model.addAttribute("user", user);
+        } catch (AuthenticationFailureException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            Post post = postService.getById(postId);
+            Comment comment = commentService.getById(commentId);
+
+            if (!comment.getCreatedBy().equals(user)) {
+                throw new UnauthorizedOperationException("You are not allowed to edit this comment.");
+            }
+
+            CommentDtoOut commentDtoOut = commentMapper.toDtoOut(comment);
+
+            model.addAttribute("post", post);
+            model.addAttribute("commentId", commentId);
+            model.addAttribute("comment", commentDtoOut);
+
+            return "update-comment-page";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("error", e.getMessage());
+            return "page-not-found";
+        } catch (UnauthorizedOperationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
+        }
+    }
+
+    @PostMapping("/{postId}/comment/update/{commentId}")
+    public String updateComment(@PathVariable int postId, @PathVariable int commentId, @Valid @ModelAttribute("comment") CommentDto commentDto,
+                             BindingResult errors,
+                             HttpSession httpSession, Model model) {
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(httpSession);
+        } catch (AuthenticationFailureException e){
+            return "redirect:/auth/login";
+        }
+
+        if (errors.hasErrors()) {
+            return "update-comment-page";
+        }
+
+        try {
+            Comment newComment = commentMapper.fromDtoForUpdate(commentId, commentDto);
+            commentService.updateComment(user, newComment);
+
+            return "redirect:/posts/" + postId;
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("name", "comment.exists", e.getMessage());
+            return "update-comment-page";
+        } catch (EntityNotFoundException e){
+            model.addAttribute("error", e.getMessage());
+            return "page-not-found";
+        } catch (UnauthorizedOperationException e){
+            model.addAttribute("error", e.getMessage());
+            return "access-denied";
+        }
+    }
+
 //    @PostMapping("/{id}/like")
 //    public String likePost(@PathVariable int id,
 //                           HttpSession httpSession, Model model) {

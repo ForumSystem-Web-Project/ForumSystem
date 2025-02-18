@@ -44,7 +44,16 @@
         <h2>Comments</h2>
         <div class="comments-container">
             <div class="comment" th:each="comment : ${post.comments}">
-                <p><strong th:text="${comment.getCreatedBy().getUsername()}">User</strong>: <span th:text="${comment.content}">Comment</span></p>
+                <p>
+                    <strong th:text="${comment.getCreatedBy().getUsername()}">User</strong>:
+                    <span th:text="${comment.content}">Comment</span>
+                    <a class="btn-edit"
+                        th:href="@{/posts/{postId}/comment/update/{commentId}(postId=${post.getId()}, commentId=${comment.getCommentId()})}">
+                    Edit Comment
+                </a>
+                </p>
+
+
             </div>
         </div>
 

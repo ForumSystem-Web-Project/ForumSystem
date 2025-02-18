@@ -1,6 +1,6 @@
 package com.example.forumsystem.repository;
 
-import com.example.forumsystem.exeptions.EntityNotFoundException;
+import com.example.forumsystem.exceptions.EntityNotFoundException;
 import com.example.forumsystem.models.Comment;
 import com.example.forumsystem.models.Post;
 import com.example.forumsystem.models.User;

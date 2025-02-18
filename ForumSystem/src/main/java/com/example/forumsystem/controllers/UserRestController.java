@@ -1,9 +1,9 @@
 package com.example.forumsystem.controllers;
 
-import com.example.forumsystem.exeptions.DuplicateEntityException;
-import com.example.forumsystem.exeptions.EntityNotFoundException;
-import com.example.forumsystem.exeptions.InvalidOperationException;
-import com.example.forumsystem.exeptions.UnauthorizedOperationException;
+import com.example.forumsystem.exceptions.DuplicateEntityException;
+import com.example.forumsystem.exceptions.EntityNotFoundException;
+import com.example.forumsystem.exceptions.InvalidOperationException;
+import com.example.forumsystem.exceptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
 import com.example.forumsystem.helpers.PhoneNumberMapper;
 import com.example.forumsystem.helpers.UserMapper;

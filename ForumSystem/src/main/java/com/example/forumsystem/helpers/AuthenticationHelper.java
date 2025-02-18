@@ -1,7 +1,7 @@
 package com.example.forumsystem.helpers;
 
-import com.example.forumsystem.exeptions.EntityNotFoundException;
-import com.example.forumsystem.exeptions.UnauthorizedOperationException;
+import com.example.forumsystem.exceptions.EntityNotFoundException;
+import com.example.forumsystem.exceptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

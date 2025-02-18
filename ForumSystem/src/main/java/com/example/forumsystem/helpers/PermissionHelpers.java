@@ -1,7 +1,6 @@
 package com.example.forumsystem.helpers;
 
-import com.example.forumsystem.exeptions.UnauthorizedOperationException;
-import com.example.forumsystem.models.PhoneNumber;
+import com.example.forumsystem.exceptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.Post;
 import com.example.forumsystem.models.User;
 

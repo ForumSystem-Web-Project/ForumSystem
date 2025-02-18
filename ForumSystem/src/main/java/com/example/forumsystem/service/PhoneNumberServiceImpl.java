@@ -1,10 +1,9 @@
 package com.example.forumsystem.service;
 
-import com.example.forumsystem.exeptions.DuplicateEntityException;
-import com.example.forumsystem.exeptions.EntityNotFoundException;
-import com.example.forumsystem.exeptions.InvalidOperationException;
+import com.example.forumsystem.exceptions.DuplicateEntityException;
+import com.example.forumsystem.exceptions.EntityNotFoundException;
+import com.example.forumsystem.exceptions.InvalidOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
-import com.example.forumsystem.helpers.PhoneNumberMapper;
 import com.example.forumsystem.models.PhoneNumber;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.repository.PhoneNumberRepository;
@@ -68,7 +67,6 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
         }
 
         phoneNumber.setCreatedBy(admin);
-
         phoneNumberRepository.create(phoneNumber);
     }
 

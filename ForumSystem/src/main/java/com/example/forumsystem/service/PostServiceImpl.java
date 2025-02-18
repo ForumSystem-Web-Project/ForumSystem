@@ -1,9 +1,6 @@
 package com.example.forumsystem.service;
 
-import com.example.forumsystem.exeptions.DuplicateEntityException;
-import com.example.forumsystem.exeptions.EntityNotFoundException;
-import com.example.forumsystem.exeptions.InvalidOperationException;
-import com.example.forumsystem.exeptions.UnauthorizedOperationException;
+import com.example.forumsystem.exceptions.InvalidOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.Comment;
 import com.example.forumsystem.models.FilterPostOptions;

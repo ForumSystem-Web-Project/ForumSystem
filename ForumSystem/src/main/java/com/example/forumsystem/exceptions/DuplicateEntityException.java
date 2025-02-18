@@ -1,4 +1,4 @@
-package com.example.forumsystem.exeptions;
+package com.example.forumsystem.exceptions;
 
 public class DuplicateEntityException extends RuntimeException {
 

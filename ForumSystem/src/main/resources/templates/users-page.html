@@ -44,22 +44,22 @@
 
         <div class="header">
 
-            <div class="cell" th:text="#{user.label.username}"> Username </div>
-            <div class="cell" th:text="#{user.label.firstName}"> First name </div>
-            <div class="cell" th:text="#{user.label.lastName}"> Last name </div>
-            <div class="cell" th:text="#{user.label.email}"> Email </div>
+            <div class="cell-user" th:text="#{user.label.username}"> Username </div>
+            <div class="cell-user" th:text="#{user.label.firstName}"> First name </div>
+            <div class="cell-user" th:text="#{user.label.lastName}"> Last name </div>
+            <div class="cell-user" th:text="#{user.label.email}"> Email </div>
 
         </div>
 
-        <div class="row" th:each="user : ${users}">
+        <div class="row-user" th:each="user : ${users}">
 
-            <div class="cell">
+            <div class="cell-user">
                 <a href="#" th:href="@{/users/{id}/update(id = ${user.getId()})}" th:text="${user.username}">User</a>
             </div>
 
-            <div class="cell" th:text="${user.firstName}"> Test </div>
-            <div class="cell" th:text="${user.lastName}"> Test </div>
-            <div class="cell" th:text="${user.email}"> Email </div>
+            <div class="cell-user" th:text="${user.firstName}"> Test </div>
+            <div class="cell-user" th:text="${user.lastName}"> Test </div>
+            <div class="cell-user" th:text="${user.email}"> Email </div>
 
         </div>
 

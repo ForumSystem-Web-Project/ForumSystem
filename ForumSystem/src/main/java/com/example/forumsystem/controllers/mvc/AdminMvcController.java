@@ -98,7 +98,7 @@ public class AdminMvcController {
         }
 
         userService.blockUser(admin, id);
-        return "redirect:/admin/users";
+        return "redirect:/admin/dashboard";
     }
 
     @PostMapping("/users/{id}/unblock")
@@ -109,7 +109,7 @@ public class AdminMvcController {
         }
 
         userService.unblockUser(admin, id);
-        return "redirect:/admin/users";
+        return "redirect:/admin/dashboard";
     }
 
 

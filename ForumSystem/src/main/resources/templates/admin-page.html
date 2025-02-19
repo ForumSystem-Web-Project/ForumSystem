@@ -34,17 +34,17 @@
 
 <form class="filer-form" action="#" th:action="@{${requestURI}}" th:object="${filterDto}" method="get">
     <div class="filter-container">
-        <label class="filter-label">Filter by:</label>
-        <input class="filter-input" type="text" placeholder="Post Title" th:field="*{title}">
+        <label class="filter-user-label">Filter by:</label>
+        <input class="filter-user-input" type="text" placeholder="Post Title" th:field="*{title}">
 
-        <label class="filter-label">Sort By:</label>
-        <select class="filter-select" th:field="*{sortBy}">
+        <label class="filter-user-label">Sort By:</label>
+        <select class="filter-user-select" th:field="*{sortBy}">
             <option value="">Sort by</option>
             <option value="title">By title</option>
         </select>
 
-        <label class="filter-label">Sort Order:</label>
-        <select class="filter-select" th:field="*{sortOrder}">
+        <label class="filter-user-label">Sort Order:</label>
+        <select class="filter-user-select" th:field="*{sortOrder}">
             <option value="">Ascending</option>
             <option value="desc">Descending</option>
 
@@ -66,50 +66,47 @@
 </div>
 
 <form class="filter-form" action="#" th:action="@{${requestURI}}" th:object="${filterUserDto}" method="get">
-    <div class="filter-container">
-        <label class="filter-label">Filter by:</label>
-        <input class="filter-input" type="text" placeholder="First Name" th:field="*{firstName}">
-        <input class="filter-input" type="text" placeholder="Username" th:field="*{username}">
-        <input class="filter-input" type="text" placeholder="Email" th:field="*{email}">
+    <div class="filter-user-container">
+        <label class="filter-user-label">Filter by:</label>
+        <input class="filter-user-input" type="text" placeholder="First Name" th:field="*{firstName}">
+        <input class="filter-user-input" type="text" placeholder="Username" th:field="*{username}">
+        <input class="filter-user-input" type="text" placeholder="Email" th:field="*{email}">
 
-        <label class="filter-label">Sort By:</label>
-        <select class="filter-select" th:field="*{sortBy}">
+        <label class="filter-user-label">Sort By:</label>
+        <select class="filter-user-select" th:field="*{sortBy}">
             <option value="">Sort by</option>
             <option value="firstName">By first name</option>
             <option value="username">By username</option>
             <option value="email">By email</option>
         </select>
 
-        <label class="filter-label">Sort Order:</label>
-        <select class="filter-select" th:field="*{sortOrder}">
+        <label class="filter-user-label">Sort Order:</label>
+        <select class="filter-user-select" th:field="*{sortOrder}">
             <option value="">Ascending</option>
             <option value="desc">Descending</option>
         </select>
 
-        <input class="filter-button" type="submit" value="Search">
+        <input class="filter-user-button" type="submit" value="Search">
     </div>
 </form>
 
-<div class="table">
+<div class="table-user">
 
-    <div class="header">
+    <div class="header-user">
 
-        <div class="cell" th:text="#{user.label.username}"> Username </div>
-        <div class="cell" th:text="#{user.label.firstName}"> First name </div>
-        <div class="cell" th:text="#{user.label.lastName}"> Last name </div>
-        <div class="cell" th:text="#{user.label.email}"> Email </div>
+        <div class="cell-user" th:text="#{user.label.username}"> Username </div>
+        <div class="cell-user" th:text="#{user.label.firstName}"> First name </div>
+        <div class="cell-user" th:text="#{user.label.lastName}"> Last name </div>
+        <div class="cell-user" th:text="#{user.label.email}"> Email </div>
 
     </div>
 
-    <div class="row" th:each="user : ${users}">
+    <div class="row-user" th:each="user : ${users}">
 
-        <div class="cell">
-            <a href="#" th:href="@{/users/{id}/update(id = ${user.getId()})}" th:text="${user.username}">User</a>
-        </div>
-
-        <div class="cell" th:text="${user.firstName}"> Test </div>
-        <div class="cell" th:text="${user.lastName}"> Test </div>
-        <div class="cell" th:text="${user.email}"> Email </div>
+        <div class="cell-user" th:text="${user.username}"> User </div>
+        <div class="cell-user" th:text="${user.firstName}"> Test </div>
+        <div class="cell-user" th:text="${user.lastName}"> Test </div>
+        <div class="cell-user" th:text="${user.email}"> Email </div>
 
         <form th:if="${!user.isBlocked()}" method="post" th:action="@{/admin/users/{id}/block(id=${user.id})}">
             <button type="submit" class="block-user-btn">Block</button>

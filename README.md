@@ -1,5 +1,76 @@
-# ForumSystem
-This is a forum system, where a user can create a post, add comments to a his or someone else posts and also like posts. You as a user have first and last name, email, username and password. You can log in and log out of the system. If you are not logged in, you can only see how many users are using the platform and how many posts have been created so far. Once you are logged in, you can browse posts created by the other users with an option to sort and filter them. You can also see the details of every post ( title, content, comments and likes ). Logged users could also update their personal information, create a post and edit previous personal posts. Of course, you can like and comment any posts as well. There are also admins. They may have a phone number in their personal info and they can also search for a user by their username, email or first name. Admin are able to block or unblock individual users as well as deleting any post.
+# Spring boot Project "Forum System"
 
-![database_screen](https://github.com/user-attachments/assets/cc129bec-f92c-4187-8058-fc7c0bb58e6c)
+## Overview
 
+The Forum System is a platform where users can engage in discussions by creating posts, adding comments, and upvoting/downvoting content. The forum is centered around specific topics, fostering community-driven discussions. Users can register, log in, and interact with posts based on their interests. Once logged in users can sort and filter all posts and also update their personal information. Administrators have additional privileges such as managing users, search them by name, username or email and moderating content.
+
+
+---
+<br>
+
+## Features
+
+- User Registration & Authentication
+- User Profile Management (Update personal details)
+- Create, Edit, and Delete Posts
+- Comment on Posts
+- Edit personal comments
+- Upvote/Downvote Posts
+- View and Sort Posts
+- Admin Panel for User Management
+- Block/Unblock Users
+- Search Users by Username, Email, or First Name
+- REST API with Swagger Documentation
+
+
+---
+<br>
+
+## Technologies Used
+
+- Java
+- Spring Boot / MVC
+- SQL
+- Hibernate
+- HTML / CSS
+- Thymeleaf
+- RestAPI
+- Swagger (API Documentation)
+
+
+---
+<br />
+
+## Installation
+
+Follow these steps to set up and run the application:
+
+1. Clone the project from GitHub.
+2. Connect to a local database server and execute the provided SQL scripts.
+3. Configure the application properties for database connection.
+4. Run the Spring Boot application.
+5. Open the browser and navigate to http://localhost:8080/.
+
+
+---
+<br>
+
+## Database Diagram
+
+![database](https://github.com/user-attachments/assets/65baefe6-609d-4a25-b4df-515e8d40190b)
+
+
+
+<br>
+
+## Contributors
+{{For further information, please feel free to contact me:}}
+
+| Authors          | Emails                         | GitHub                           |
+| -----------------| -------------------------------|--------------------------------  |
+| Chavdar Tsvetkov | chavdartsvetkov.2000@gmail.com | https://github.com/Chavo02
+| Viktor Angelov   | vikotor05@gmail.com            | https://github.com/Viktor030105  |
+
+
+---
+<br />

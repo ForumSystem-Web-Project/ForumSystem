@@ -1,6 +1,6 @@
 package com.example.forumsystem.controllers.mvc;
 
-import com.example.forumsystem.exeptions.AuthenticationFailureException;
+import com.example.forumsystem.exceptions.AuthenticationFailureException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
 import com.example.forumsystem.models.*;
 import com.example.forumsystem.service.PostService;

@@ -1,8 +1,8 @@
 package com.example.forumsystem.helpers;
 
-import com.example.forumsystem.exeptions.AuthenticationFailureException;
-import com.example.forumsystem.exeptions.EntityNotFoundException;
-import com.example.forumsystem.exeptions.UnauthorizedOperationException;
+import com.example.forumsystem.exceptions.AuthenticationFailureException;
+import com.example.forumsystem.exceptions.EntityNotFoundException;
+import com.example.forumsystem.exceptions.UnauthorizedOperationException;
 import com.example.forumsystem.models.User;
 import com.example.forumsystem.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -43,6 +43,31 @@ public class AuthenticationHelper {
         } catch (EntityNotFoundException e) {
             throw new UnauthorizedOperationException(INVALID_AUTHENTICATION_ERROR);
         }
+    }
+
+    public User verifyAuthentication(String username, String password) {
+        try {
+            User user = userService.getByUsername(username);
+
+            if (!user.getPassword().equals(password)) {
+                throw new AuthenticationFailureException(AUTHENTICATION_FAILURE);
+            }
+
+            return user;
+
+        } catch (EntityNotFoundException e) {
+            throw new AuthenticationFailureException(AUTHENTICATION_FAILURE);
+        }
+    }
+
+    public User tryGetUser(HttpSession httpSession){
+        String currentUser = (String) httpSession.getAttribute("currentUser");
+
+        if (currentUser == null) {
+            throw new AuthenticationFailureException("No user logged in.");
+        }
+
+        return userService.getByUsername(currentUser);
     }
 
     private String getUsername(String userInfo) {

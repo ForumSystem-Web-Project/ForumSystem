@@ -1,8 +1,8 @@
 package com.example.forumsystem.controllers.mvc;
 
-import com.example.forumsystem.exeptions.AuthenticationFailureException;
-import com.example.forumsystem.exeptions.DuplicateEntityException;
-import com.example.forumsystem.exeptions.UnauthorizedOperationException;
+import com.example.forumsystem.exceptions.AuthenticationFailureException;
+import com.example.forumsystem.exceptions.DuplicateEntityException;
+import com.example.forumsystem.exceptions.UnauthorizedOperationException;
 import com.example.forumsystem.helpers.AuthenticationHelper;
 import com.example.forumsystem.helpers.CommentMapper;
 import com.example.forumsystem.helpers.PostMapper;

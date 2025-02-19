@@ -9,6 +9,9 @@ import com.example.forumsystem.helpers.PostMapper;
 import com.example.forumsystem.models.*;
 import com.example.forumsystem.service.CommentService;
 import com.example.forumsystem.service.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
+@Tag(name = "Post Controller", description = "Different post related options. Create, update, delete, like, unlike or comment a post. Multiple choices.")
 public class PostRestController {
 
     private final PostService postService;
@@ -38,7 +42,7 @@ public class PostRestController {
         this.commentMapper = commentMapper;
     }
 
-    //Filtering and Sorting
+    @Operation(summary = "Get all posts.", description = "Get all posts in the app with filtering provided.")
     @GetMapping
     public List<PostDtoOut> getAll(
             @RequestParam(required = false) String title,
@@ -52,6 +56,7 @@ public class PostRestController {
         return postMapper.listAllPostsDtoOut(postService.getAll(filterOptions));
     }
 
+    @Operation(summary = "Get a specific post.", description = "Get a post by providing its ID.")
     @GetMapping("/postId/{id}")
     public PostWithLikesAndCommentsDtoOut getPostById(@PathVariable int id) {
         try {
@@ -62,6 +67,7 @@ public class PostRestController {
         }
     }
 
+    @Operation(summary = "Get a specific post.", description = "Get a post by providing its title.")
     @GetMapping("/title/{title}")
     public PostWithLikesAndCommentsDtoOut getPostByTitle(@PathVariable String title) {
         try {
@@ -72,20 +78,23 @@ public class PostRestController {
         }
     }
 
-
+    @Operation(summary = "Get the 10 most commented posts.", description = "Get the 10 most commented posts in the app at the time.")
     @GetMapping("/mostCommentedPosts")
     public List<PostWithLikesAndCommentsDtoOut> getMostCommentedPosts() {
         List<Post> posts = postService.getMostCommentedPosts();
         return postMapper.convertToDtoList(posts);
     }
 
+    @Operation(summary = "Get the 10 most recent posts.", description = "Get the 10 most recent posts in the app at the time.")
     @GetMapping("/mostRecentPosts")
     public List<PostWithLikesAndCommentsDtoOut> getMostRecentPosts() {
         List<Post> posts = postService.getMostRecentPosts();
         return postMapper.convertToDtoList(posts);
     }
 
+    @Operation(summary = "Create a post.", description = "Create a post.")
     @PostMapping
+    @SecurityRequirement(name = "authHeader")
     public PostDtoOut createPost(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -99,7 +108,9 @@ public class PostRestController {
         }
     }
 
+    @Operation(summary = "Update a post.", description = "Update a post.")
     @PutMapping("/{id}")
+    @SecurityRequirement(name = "authHeader")
     public PostWithLikesAndCommentsDtoOut updatePost(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -115,7 +126,9 @@ public class PostRestController {
         }
     }
 
+    @Operation(summary = "Delete a post.", description = "Delete a post.")
     @DeleteMapping("/{id}")
+    @SecurityRequirement(name = "authHeader")
     public void deletePost(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -127,6 +140,7 @@ public class PostRestController {
         }
     }
 
+    @Operation(summary = "Get a comment.", description = "Get a specific comment by its ID.")
     @GetMapping("/comments/{commentId}")
     public CommentDtoOut getCommentById(@PathVariable int commentId) {
         try {
@@ -137,7 +151,9 @@ public class PostRestController {
         }
     }
 
+    @Operation(summary = "Comment a post.", description = "Add a comment to a specific post.")
     @PostMapping("/comments/{postId}")
+    @SecurityRequirement(name = "authHeader")
     public CommentDtoOut addComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody CommentDto commentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -151,7 +167,9 @@ public class PostRestController {
         }
     }
 
+    @Operation(summary = "Update a comment.", description = "Update a comment from a specific post.")
     @PutMapping("/comments/{postId}/{commentId}")
+    @SecurityRequirement(name = "authHeader")
     public CommentDtoOut updateComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @PathVariable int commentId, @Valid @RequestBody CommentDto commentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -167,7 +185,9 @@ public class PostRestController {
         }
     }
 
+    @Operation(summary = "Delete a comment.", description = "Delete a comment from a specific post.")
     @DeleteMapping ("/comments/{commentId}")
+    @SecurityRequirement(name = "authHeader")
     public void deleteComment(@RequestHeader HttpHeaders headers, @PathVariable int commentId) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -179,7 +199,9 @@ public class PostRestController {
         }
     }
 
+    @Operation(summary = "Like post.", description = "Like a specific post.")
     @PutMapping("/likePost/{postId}")
+    @SecurityRequirement(name = "authHeader")
     public PostWithLikesAndCommentsDtoOut likePost (@RequestHeader HttpHeaders headers, @PathVariable int postId){
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -195,7 +217,9 @@ public class PostRestController {
         }
     }
 
+    @Operation(summary = "Unlike post.", description = "Unlike a specific post.")
     @PutMapping("/unlikePost/{postId}")
+    @SecurityRequirement(name = "authHeader")
     public PostWithLikesAndCommentsDtoOut unlikePost (@RequestHeader HttpHeaders headers, @PathVariable int postId){
         try {
             User user = authenticationHelper.tryGetUser(headers);

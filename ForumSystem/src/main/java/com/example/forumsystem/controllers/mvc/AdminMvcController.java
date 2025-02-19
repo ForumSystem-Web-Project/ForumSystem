@@ -38,6 +38,7 @@ public class AdminMvcController {
     public String handleLogin(HttpSession session, Model model, @ModelAttribute("login") LoginDto loginDto) {
         try {
             authenticationHelper.verifyAuthentication(loginDto.getUsername(), loginDto.getPassword());
+            session.setAttribute("currentUser", loginDto.getUsername());
 
             User user = userService.getByUsername(loginDto.getUsername());
 
@@ -63,40 +64,53 @@ public class AdminMvcController {
     }
 
     @GetMapping("/dashboard")
-    public String showAdminDashboard(HttpSession session, Model model) {
+    public String showAdminDashboard(@ModelAttribute("filterDto") FilterDto filterDto, @ModelAttribute("filterUserDto") FilterUserDto filterUserDto, HttpSession session, Model model) {
         User admin = (User) session.getAttribute("admin");
         if (admin == null || !admin.isAdmin()) {
             return "redirect:/admin/login";
         }
-        model.addAttribute("admin", admin);
-        return "admin-page";
-    }
-
-    @GetMapping
-    public String showAllPosts(@ModelAttribute("filterDto") FilterDto filterDto, Model model) {
-        FilterPostOptions filterPostOptions = new FilterPostOptions(
+        model.addAttribute("posts", postService.getAll(new FilterPostOptions(
                 filterDto.getTitle(),
                 null,
                 null,
                 filterDto.getSortBy(),
-                filterDto.getSortOrder()
-        );
-        model.addAttribute("posts", postService.getAll(filterPostOptions));
+                filterDto.getSortOrder())));
+
+        model.addAttribute("users", userService.getAll(new FilterUserOptions(
+                filterUserDto.getFirstName(),
+                null,
+                filterUserDto.getUsername(),
+                filterUserDto.getEmail(),
+                filterUserDto.getSortBy(),
+                filterUserDto.getSortOrder())));
+
+        model.addAttribute("filterUserDto", new FilterUserDto());
+        model.addAttribute("filterDto", new FilterDto());
+        model.addAttribute("admin", admin);
         return "admin-page";
     }
 
-//    @GetMapping
-//    public String showAllUsers(@ModelAttribute("filterUserDto") FilterUserDto filterUserDto, Model model) {
-//        FilterUserOptions filterUserOptions = new FilterUserOptions(
-//                filterUserDto.getFirstName(),
-//                filterUserDto.getLastName(),
-//                filterUserDto.getUsername(),
-//                filterUserDto.getEmail(),
-//                filterUserDto.getSortBy(),
-//                filterUserDto.getSortOrder());
-//        model.addAttribute("users", userService.getAll(filterUserOptions));
-//        return "admin-page";
-//    }
+    @PostMapping("/users/{id}/block")
+    public String blockUser(@PathVariable int id, HttpSession session) {
+        User admin = (User) session.getAttribute("admin");
+        if (admin == null || !admin.isAdmin()) {
+            return "redirect:/admin/login";
+        }
+
+        userService.blockUser(admin, id);
+        return "redirect:/admin/users";
+    }
+
+    @PostMapping("/users/{id}/unblock")
+    public String unblockUser(@PathVariable int id, HttpSession session) {
+        User admin = (User) session.getAttribute("admin");
+        if (admin == null || !admin.isAdmin()) {
+            return "redirect:/admin/login";
+        }
+
+        userService.unblockUser(admin, id);
+        return "redirect:/admin/users";
+    }
 
 
     @ModelAttribute("requestURI")

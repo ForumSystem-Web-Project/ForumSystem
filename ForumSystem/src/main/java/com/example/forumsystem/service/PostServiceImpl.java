@@ -1,5 +1,6 @@
 package com.example.forumsystem.service;
 
+import com.example.forumsystem.exceptions.AlreadyLikedException;
 import com.example.forumsystem.exceptions.InvalidOperationException;
 import com.example.forumsystem.helpers.PermissionHelpers;
 import com.example.forumsystem.models.Comment;
@@ -123,9 +124,10 @@ public class PostServiceImpl implements PostService {
         PermissionHelpers.checkIfBlocked(user);
         Post post = postRepository.getById(postId);
 
-        if (post.getLikes().contains(user)){
-            throw new InvalidOperationException("User has already liked this post!");
+        if (post.getLikes().contains(user)) {
+            throw new AlreadyLikedException("You have already liked this post.");
         }
+
         post.getLikes().add(user);
         postRepository.updatePost(post);
     }
@@ -136,9 +138,10 @@ public class PostServiceImpl implements PostService {
         PermissionHelpers.checkIfBlocked(user);
         Post post = postRepository.getById(postId);
 
-        if (!post.getLikes().contains(user)){
-            throw new InvalidOperationException("User hasn't liked this post!");
+        if (post.getLikes().contains(user)) {
+            throw new AlreadyLikedException("You have already disliked this post.");
         }
+
         post.getLikes().remove(user);
         postRepository.updatePost(post);
     }

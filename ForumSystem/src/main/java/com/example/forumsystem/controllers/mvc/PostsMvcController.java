@@ -1,5 +1,6 @@
 package com.example.forumsystem.controllers.mvc;
 
+import com.example.forumsystem.exceptions.AlreadyLikedException;
 import com.example.forumsystem.exceptions.AuthenticationFailureException;
 import com.example.forumsystem.exceptions.DuplicateEntityException;
 import com.example.forumsystem.exceptions.UnauthorizedOperationException;
@@ -326,6 +327,9 @@ public class PostsMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", "You are not authorized to like this post.");
             return "access-denied";
+        } catch (AlreadyLikedException e) {
+            model.addAttribute("error", e.getMessage());
+            return "liked-post-page";
         }
     }
 
@@ -347,6 +351,9 @@ public class PostsMvcController {
         } catch (UnauthorizedOperationException e) {
             model.addAttribute("error", "You are not authorized to like this post.");
             return "access-denied";
+        } catch (AlreadyLikedException e) {
+            model.addAttribute("error", e.getMessage());
+            return "disliked-post-page";
         }
     }
 

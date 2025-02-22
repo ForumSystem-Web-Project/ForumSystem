@@ -3,11 +3,13 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Access Denied</title>
+    <title>Forum System | Liked Post</title>
     <link rel="icon" href="../static/favicon.jpg" th:href="@{/favicon.jpg}">
     <link rel="stylesheet" href="../static/style.css" th:href="@{/style.css}"/>
 
 </head>
+
+
 <body>
 
 <header>
@@ -33,10 +35,10 @@
 </header>
 
 <div class="container-not-found">
-    <img src="../static/access-denied.jpg" th:src="@{/access-denied.jpg}" class="img-not-found" alt="404 Image">
-    <h1 class="h1-not-found">Oops! Not a creator...</h1>
-    <p class="p-not-found">You do not have access to do this operation.</p>
-    <a href="/" th:href="@{/}" class="home-btn-not-found">Go Back Home</a>
+    <img src="../static/liked-post.png" th:src="@{/liked-post.png}" class="img-not-found" alt="404 Image">
+    <h1 class="h1-not-found">Action Not Allowed</h1>
+    <p class="p-not-found" th:text="${error}"></p>
+    <a href="/" th:href="@{/posts}" class="home-btn-not-found">Go Back to Posts</a>
 </div>
 
 <footer>

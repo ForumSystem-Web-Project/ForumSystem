@@ -39,9 +39,11 @@
     <form class="form-create" th:action="@{/posts/create}" method="post" th:object="${post}">
         <label class="label-create">Title:</label>
         <input class="input-create" type="text" th:field="*{title}" required>
+        <span class="form-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
 
         <label class="label-create">Content:</label>
         <textarea class="textarea-create" th:field="*{content}" required></textarea>
+        <span class="form-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
 
         <button type="submit" class="button">Create Post</button>
     </form>

@@ -54,7 +54,7 @@ public class UserMvcController {
         try {
             User loggedInUser = authenticationHelper.tryGetUser(session);
 
-            if (loggedInUser.getId() != id) {
+            if (loggedInUser.getId() != id && !loggedInUser.isAdmin()) {
                 throw new UnauthorizedOperationException("You can only update your own account.");
             }
 
@@ -86,7 +86,7 @@ public class UserMvcController {
         try {
             User loggedInUser = authenticationHelper.tryGetUser(session);
 
-            if (loggedInUser.getId() != id) {
+            if (loggedInUser.getId() != id && !loggedInUser.isAdmin()) {
                 throw new UnauthorizedOperationException("You can only update your own account.");
             }
 

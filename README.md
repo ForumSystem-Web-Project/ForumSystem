@@ -110,6 +110,14 @@ Admin Panel page
 ![admin-3](https://github.com/user-attachments/assets/1dfe51bf-9600-4c05-8f83-c67c9c790ef6)
 <br><br><br>
 
+Liked Post page
+![liked-post-page](https://github.com/user-attachments/assets/8c6746f0-8139-48ce-920f-ca2634c22ed1)
+<br><br><br>
+
+Disliked Post page
+![disliked-post-page](https://github.com/user-attachments/assets/8121ff3d-9124-4aba-a526-ce75116e1707)
+<br><br><br>
+
 Access-Denied page
 ![page-not-found](https://github.com/user-attachments/assets/69eff63a-8d92-4b4e-aeb9-e5d756af7126)
 <br><br><br>

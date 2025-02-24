@@ -112,6 +112,30 @@ public class AdminMvcController {
         return "redirect:/admin/dashboard";
     }
 
+    @PostMapping("/users/{id}/make-admin")
+    public String makeAdmin(@PathVariable int id, HttpSession session) {
+        User admin = (User) session.getAttribute("admin");
+
+        if (admin == null || !admin.isAdmin()) {
+            return "redirect:/admin/login";
+        }
+
+        userService.makeAdmin(admin, id);
+        return "redirect:/admin/dashboard";
+    }
+
+    @PostMapping("/users/{id}/remove-admin")
+    public String removeAdmin(@PathVariable int id, HttpSession session) {
+        User admin = (User) session.getAttribute("admin");
+
+        if (admin == null || !admin.isAdmin()) {
+            return "redirect:/admin/login";
+        }
+
+        userService.removeAdmin(admin, id);
+        return "redirect:/admin/dashboard";
+    }
+
 
     @ModelAttribute("requestURI")
     public String requestURI(final HttpServletRequest request) {

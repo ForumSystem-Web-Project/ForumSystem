@@ -115,6 +115,15 @@
         <form th:if="${user.isBlocked()}" method="post" th:action="@{/admin/users/{id}/unblock(id=${user.id})}">
             <button type="submit" class="unblock-user-btn">Unblock</button>
         </form>
+
+        <form th:if="${!user.isAdmin()}" method="post" th:action="@{/admin/users/{id}/make-admin(id=${user.id})}">
+            <button type="submit" class="make-admin-btn">Make Admin</button>
+        </form>
+
+        <form th:if="${user.isAdmin()}" method="post" th:action="@{/admin/users/{id}/remove-admin(id=${user.id})}">
+            <button type="submit" class="remove-admin-btn">Remove Admin</button>
+        </form>
+
     </div>
 
 </div>
